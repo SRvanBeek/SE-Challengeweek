@@ -15,6 +15,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Game extends GameApplication {
 
+    // test if push works (by Stan)
+
     private Entity player;
     private int speed = 5;
     private ArrayList<Entity> walls = new ArrayList<>();
