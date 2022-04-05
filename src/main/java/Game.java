@@ -36,10 +36,10 @@ public class Game extends GameApplication {
     @Override
     protected void initGame() {
         player = FXGL.entityBuilder()
-                .at(65, 65)
+                .at(75, 75)
                 .viewWithBBox("BombermanBlond2.png")
                 .with(new CollidableComponent(true))
-                .scale(1,1)
+                .scale(1.3,1.3)
                 .type(EntityTypes.PLAYER)
                 .buildAndAttach();
 
