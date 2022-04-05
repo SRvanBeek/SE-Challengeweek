@@ -46,7 +46,7 @@ public class Game extends GameApplication {
         //outside walls
         Entity wall1 = FXGL.entityBuilder()
                 .at(0, 0)
-                .viewWithBBox(new Rectangle(FXGL.getGameScene().getAppWidth(), 64, Color.BLUE))
+                .viewWithBBox("wall-1.png")
                 .with(new CollidableComponent(true))
                 .type(EntityTypes.FIXEDBLOCK)
                 .buildAndAttach();
@@ -55,7 +55,7 @@ public class Game extends GameApplication {
 
         Entity wall2 = FXGL.entityBuilder()
                 .at(0, height - 64)
-                .viewWithBBox(new Rectangle(FXGL.getGameScene().getAppWidth(), 64, Color.BLUE))
+                .viewWithBBox("wall-1.png")
                 .with(new CollidableComponent(true))
                 .type(EntityTypes.FIXEDBLOCK)
                 .buildAndAttach();
@@ -64,7 +64,7 @@ public class Game extends GameApplication {
 
         Entity wall3 = FXGL.entityBuilder()
                 .at(0, 0)
-                .viewWithBBox(new Rectangle(64, FXGL.getGameScene().getAppHeight(), Color.BLUE))
+                .viewWithBBox("wall-2.png")
                 .with(new CollidableComponent(true))
                 .type(EntityTypes.FIXEDBLOCK)
                 .buildAndAttach();
@@ -73,7 +73,7 @@ public class Game extends GameApplication {
 
         Entity wall4 = FXGL.entityBuilder()
                 .at(width - 64, 0)
-                .viewWithBBox(new Rectangle(64, FXGL.getGameScene().getAppHeight(), Color.BLUE))
+                .viewWithBBox("wall-2.png")
                 .with(new CollidableComponent(true))
                 .type(EntityTypes.FIXEDBLOCK)
                 .buildAndAttach();
@@ -87,7 +87,7 @@ public class Game extends GameApplication {
             for (int j = 1; j < 6; j++) {
                 Entity box = FXGL.entityBuilder()
                         .at(128 * i, 128 * j)
-                        .viewWithBBox(new Rectangle(64, 64, Color.GRAY))
+                        .viewWithBBox("metal-1.png")
                         .with(new CollidableComponent(true))
                         .type(EntityTypes.FIXEDBLOCK)
                         .buildAndAttach();
@@ -103,7 +103,7 @@ public class Game extends GameApplication {
                 if (spawn > 0) {
                     Entity box = FXGL.entityBuilder()
                             .at((128 * i) + 64, (64 * j))
-                            .viewWithBBox("tonnetje-1.png")
+                            .viewWithBBox("box-1.png")
                             .with(new CollidableComponent(true))
                             .type(EntityTypes.FIXEDBLOCK)
                             .buildAndAttach();
@@ -119,7 +119,7 @@ public class Game extends GameApplication {
                 if (spawn > 0) {
                     Entity box = FXGL.entityBuilder()
                             .at((64 * i), (128 * j) + 64)
-                            .viewWithBBox("tonnetje-1.png")
+                            .viewWithBBox("box-2.png")
                             .with(new CollidableComponent(true))
                             .type(EntityTypes.FIXEDBLOCK)
                             .buildAndAttach();
