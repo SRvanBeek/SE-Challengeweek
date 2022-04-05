@@ -103,7 +103,7 @@ public class Game extends GameApplication {
                 if (spawn > 0) {
                     Entity box = FXGL.entityBuilder()
                             .at((128 * i) + 64, (64 * j))
-                            .viewWithBBox(new Rectangle(64, 64, Color.BROWN))
+                            .viewWithBBox("tonnetje-1.png")
                             .with(new CollidableComponent(true))
                             .type(EntityTypes.FIXEDBLOCK)
                             .buildAndAttach();
@@ -119,7 +119,7 @@ public class Game extends GameApplication {
                 if (spawn > 0) {
                     Entity box = FXGL.entityBuilder()
                             .at((64 * i), (128 * j) + 64)
-                            .viewWithBBox(new Rectangle(64, 64, Color.BROWN))
+                            .viewWithBBox("tonnetje-1.png")
                             .with(new CollidableComponent(true))
                             .type(EntityTypes.FIXEDBLOCK)
                             .buildAndAttach();
