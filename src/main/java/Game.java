@@ -10,6 +10,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -18,7 +19,7 @@ public class Game extends GameApplication {
     // test if push works (by Stan)
 
     private Entity player;
-    private int speed = 5;
+    private int speed = 2;
     private ArrayList<Entity> walls = new ArrayList<>();
     private int width = 960;
     private int height = 832;
@@ -131,39 +132,46 @@ public class Game extends GameApplication {
         FXGL.getGameScene().setBackgroundColor(Color.BLACK);
     }
 
-    @Override
-    protected void initInput() {
-        FXGL.onKey(KeyCode.D, () -> {
-            player.translateX(speed);
-            for (int i = 0; i < walls.size(); i++) {
-                if (player.isColliding(walls.get(i))) {
+    public void objCrash(String input) {
+        for (Entity wall : walls) {
+            if (player.isColliding(wall)) {
+                if (Objects.equals(input, "W")) {
+                    player.translateY(speed);
+                }
+                if (Objects.equals(input, "S")) {
+                    player.translateY(-speed);
+                }
+                if (Objects.equals(input, "A")) {
+                    player.translateX(speed);
+                }
+                if (Objects.equals(input, "D")) {
                     player.translateX(-speed);
                 }
             }
-        });
-        FXGL.onKey(KeyCode.A, () -> {
-            player.translateX(-speed);
-            for (int i = 0; i < walls.size(); i++) {
-                if (player.isColliding(walls.get(i))) {
-                    player.translateX(speed);
-                }
-            }
-        });
+        }
+    }
+
+
+    @Override
+    protected void initInput() {
         FXGL.onKey(KeyCode.W, () -> {
             player.translateY(-speed);
-            for (int i = 0; i < walls.size(); i++) {
-                if (player.isColliding(walls.get(i))) {
-                    player.translateY(speed);
-                }
-            }
+            objCrash("W");
         });
+
         FXGL.onKey(KeyCode.S, () -> {
             player.translateY(speed);
-            for (int i = 0; i < walls.size(); i++) {
-                if (player.isColliding(walls.get(i))) {
-                    player.translateY(-speed);
-                }
-            }
+            objCrash("S");
+        });
+
+        FXGL.onKey(KeyCode.A, () -> {
+            player.translateX(-speed);
+            objCrash("A");
+        });
+
+        FXGL.onKey(KeyCode.D, () -> {
+            player.translateX(speed);
+            objCrash("D");
         });
     }
 
@@ -175,11 +183,6 @@ public class Game extends GameApplication {
 
             }
         });
-
-
-
-
-
     }
 
 
