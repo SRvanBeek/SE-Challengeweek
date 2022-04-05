@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="SE-Challengeweek" />
         <module name="SE-Bomberman" />
       </profile>
     </annotationProcessing>
