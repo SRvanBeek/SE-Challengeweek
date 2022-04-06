@@ -33,6 +33,8 @@ public class Game extends GameApplication {
 
     @Override
     protected void initInput() {
+
+        // Leest input voor naar rechts
         getInput().addAction(new UserAction("Right") {
             @Override
             protected void onAction() {
@@ -41,6 +43,18 @@ public class Game extends GameApplication {
             }
         }, KeyCode.D, VirtualButton.RIGHT);
 
+
+//         Leest input voor naar beneden (einde)        TO DO: D kan niet 2 keer assigned worden (voor elke input)
+//        getInput().addAction(new UserAction("RightEnd") {
+//            @Override
+//            protected void onActionEnd() {
+//                super.onActionEnd();
+//                player.getComponent(Player.class).rightEnd();
+//            }
+//        }, KeyCode.D, VirtualButton.RIGHT);
+
+
+        // Leest input voor naar links
         getInput().addAction(new UserAction("Left") {
             @Override
             protected void onAction() {
@@ -49,6 +63,8 @@ public class Game extends GameApplication {
             }
         }, KeyCode.A, VirtualButton.LEFT);
 
+
+        // Leest input voor naar boven
         getInput().addAction(new UserAction("Up") {
             @Override
             protected void onAction() {
@@ -57,6 +73,8 @@ public class Game extends GameApplication {
             }
         }, KeyCode.W, VirtualButton.LEFT);
 
+
+        // Leest input voor naar beneden
         getInput().addAction(new UserAction("Down") {
             @Override
             protected void onAction() {
@@ -65,6 +83,8 @@ public class Game extends GameApplication {
             }
         }, KeyCode.S, VirtualButton.LEFT);
     }
+
+
 
     public static void main(String[] args) {
         launch(args);

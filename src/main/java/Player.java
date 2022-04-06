@@ -3,9 +3,8 @@ import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.util.Duration;
-
 import static com.almasb.fxgl.dsl.FXGLForKtKt.image;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.texture;
+
 
 public class Player extends Component {
 
@@ -39,6 +38,11 @@ public class Player extends Component {
     public void right() {
         direction = "right";
         physics.setVelocityX(movementSpeed);
+    }
+
+    public void rightEnd() {
+        direction = "right";
+        physics.setVelocityX(movementSpeed = 0);
     }
 
 
