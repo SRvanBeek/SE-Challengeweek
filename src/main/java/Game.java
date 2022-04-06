@@ -22,7 +22,7 @@ public class Game extends GameApplication {
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new Factory());
-        FXGL.setLevelFromMap("mario.tmx");
+        FXGL.setLevelFromMap("test.tmx");
 
         player = getGameWorld().spawn("player");
 
@@ -44,7 +44,6 @@ public class Game extends GameApplication {
         }, KeyCode.D, VirtualButton.RIGHT);
 
 
-//         Leest input voor naar beneden (einde)        TO DO: D kan niet 2 keer assigned worden (voor elke input)
 //        getInput().addAction(new UserAction("RightEnd") {
 //            @Override
 //            protected void onActionEnd() {

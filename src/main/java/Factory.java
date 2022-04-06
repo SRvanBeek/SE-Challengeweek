@@ -25,6 +25,7 @@ public class Factory implements EntityFactory {
                 .build();
     }
 
+
     @Spawns("player")
     public Entity newPlayer(SpawnData data) {
         PhysicsComponent physics = new PhysicsComponent();
