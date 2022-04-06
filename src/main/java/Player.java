@@ -19,7 +19,7 @@ public class Player extends Component {
 
     public Player() {
         this.initialAnimation = new AnimationChannel(
-                image("player_1" + "_move_DOWN.png"),
+                image("player_1" + "_move_down.png"),
                 4,
                 31,
                 41,
