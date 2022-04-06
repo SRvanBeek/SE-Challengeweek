@@ -12,8 +12,8 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class Game extends GameApplication {
 
-
     private Entity player;
+    private Entity test;
 
 
     @Override
@@ -26,9 +26,10 @@ public class Game extends GameApplication {
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new Factory());
-        FXGL.setLevelFromMap("test.tmx");
+        FXGL.setLevelFromMap("map1.tmx");
 
         player = getGameWorld().spawn("player");
+
 
         Viewport viewport = getGameScene().getViewport();
         viewport.bindToEntity(player, getAppWidth() /2.0, getAppHeight() /2.0);

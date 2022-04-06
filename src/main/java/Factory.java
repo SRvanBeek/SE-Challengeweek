@@ -29,7 +29,7 @@ public class Factory implements EntityFactory {
     @Spawns("box")
     public Entity newBox(SpawnData data) {
         return FXGL.entityBuilder(data)
-                .type(EntityTypes.PLATFORM)
+                .type(EntityTypes.BOX)
                 .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
                 .with(new PhysicsComponent())
                 .collidable()
