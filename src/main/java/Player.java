@@ -2,6 +2,7 @@ import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
+import javafx.scene.image.Image;
 import javafx.util.Duration;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.image;
 
@@ -26,6 +27,13 @@ public class Player extends Component {
         );
         texture = new AnimatedTexture(initialAnimation);
         texture.loop();
+    }
+
+    public Image getAnimationOnMovement() {
+        String animationName = "player_";
+        animationName += physics.isMovingX() || physics.isMovingY() ? "move_" : "idle_";
+        animationName += direction;
+        return (new Image(animationName));
     }
 
 
