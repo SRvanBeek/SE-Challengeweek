@@ -17,11 +17,16 @@ public class Player extends Component {
     private AnimationChannel initialAnimation;
     private PhysicsComponent physics;
     private AnimatedTexture texture;
+<<<<<<< Updated upstream
 
+=======
+    private AnimationChannel initialAnimation;
+    private AnimationChannel newAnimation;
+>>>>>>> Stashed changes
 
     public Player() {
         this.initialAnimation = new AnimationChannel(
-                image("player_1" + "_move_down.png"),
+                image("player_1_move_down.png"),
                 4,
                 31,
                 41,
@@ -32,19 +37,41 @@ public class Player extends Component {
         texture = new AnimatedTexture(initialAnimation);
     }
 
+<<<<<<< Updated upstream
 
+=======
+    public void animationMoving(){
+        this.newAnimation = new AnimationChannel(
+                image(getAnimationOnMovement()),
+                4,
+                31,
+                41,
+                Duration.seconds(1),
+                1,
+                3
+
+        );
+        texture = new AnimatedTexture(newAnimation);
+        texture.loop();
+    }
+>>>>>>> Stashed changes
     @Override
     public void onAdded(){
         entity.getViewComponent().addChild(texture);
     }
-
-    public Image getAnimationOnMovement() {
-        String animationName = "player_" + playerNumber;
-        animationName += physics.isMovingX() || physics.isMovingY() ? "move_" : "idle_";
-        animationName += direction;
-        return (new Image(animationName));
+    public String getAnimationOnMovement() {
+        String animationName = "player_1" + "_move_";
+        //animationName += physics.isMovingX() || physics.isMovingY() ? "move_" : "idle_";
+        animationName += direction + ".png";
+        return animationName;
     }
 
+    @Override
+    public void onUpdate(double tpf) {
+        if(physics.isMovingX() || physics.isMovingY()){
+            animationMoving();
+        }
+    }
 
     public void left() {
         direction = "left";
