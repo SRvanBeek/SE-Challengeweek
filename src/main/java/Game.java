@@ -11,13 +11,16 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class Game extends GameApplication {
 
+
     private Entity player;
+
 
     @Override
     protected void initSettings(GameSettings gameSettings) {
         gameSettings.setWidth(15 * 70);
         gameSettings.setHeight(10 * 70);
     }
+
 
     @Override
     protected void initGame() {
@@ -31,58 +34,58 @@ public class Game extends GameApplication {
         viewport.setLazy(true);
     }
 
+
     @Override
     protected void initInput() {
 
-        // Leest input voor naar rechts
         getInput().addAction(new UserAction("Right") {
             @Override
             protected void onAction() {
                 super.onAction();
                 player.getComponent(Player.class).right();
             }
-        }, KeyCode.D, VirtualButton.RIGHT);
+            @Override
+            protected void onActionEnd() {
+                super.onActionEnd();
+                player.getComponent(Player.class).rightEnd();
+            }}, KeyCode.D, VirtualButton.RIGHT);
 
-
-//        getInput().addAction(new UserAction("RightEnd") {
-//            @Override
-//            protected void onActionEnd() {
-//                super.onActionEnd();
-//                player.getComponent(Player.class).rightEnd();
-//            }
-//        }, KeyCode.D, VirtualButton.RIGHT);
-
-
-        // Leest input voor naar links
         getInput().addAction(new UserAction("Left") {
             @Override
             protected void onAction() {
                 super.onAction();
                 player.getComponent(Player.class).left();
             }
-        }, KeyCode.A, VirtualButton.LEFT);
+            @Override
+            protected void onActionEnd() {
+                super.onAction();
+                player.getComponent(Player.class).leftEnd();
+            }}, KeyCode.A, VirtualButton.LEFT);
 
-
-        // Leest input voor naar boven
         getInput().addAction(new UserAction("Up") {
             @Override
             protected void onAction() {
                 super.onAction();
                 player.getComponent(Player.class).up();
             }
-        }, KeyCode.W, VirtualButton.LEFT);
+            @Override
+            protected void onActionEnd() {
+                super.onAction();
+                player.getComponent(Player.class).upEnd();
+            }}, KeyCode.W, VirtualButton.UP);
 
-
-        // Leest input voor naar beneden
         getInput().addAction(new UserAction("Down") {
             @Override
             protected void onAction() {
                 super.onAction();
                 player.getComponent(Player.class).down();
             }
-        }, KeyCode.S, VirtualButton.LEFT);
+            @Override
+            protected void onActionEnd() {
+                super.onAction();
+                player.getComponent(Player.class).downEnd();
+        }}, KeyCode.S, VirtualButton.DOWN);
     }
-
 
 
     public static void main(String[] args) {

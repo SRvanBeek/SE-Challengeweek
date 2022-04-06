@@ -51,6 +51,7 @@ public class Factory implements EntityFactory {
                 .build();
     }
 
+
     @Spawns("coin")
     public Entity newCoin(SpawnData data) {
         return FXGL.entityBuilder(data)

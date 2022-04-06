@@ -10,6 +10,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.image;
 public class Player extends Component {
 
     private Integer movementSpeed = 200;
+    private Integer idleSpeed = 0;
     private String direction = " ";
 
     private PhysicsComponent physics;
@@ -42,6 +43,11 @@ public class Player extends Component {
         physics.setVelocityX(-movementSpeed);
     }
 
+    public void leftEnd() {
+        direction = "left";
+        physics.setVelocityX(idleSpeed);
+    }
+
 
     public void right() {
         direction = "right";
@@ -50,7 +56,7 @@ public class Player extends Component {
 
     public void rightEnd() {
         direction = "right";
-        physics.setVelocityX(movementSpeed = 0);
+        physics.setVelocityX(idleSpeed);
     }
 
 
@@ -59,8 +65,18 @@ public class Player extends Component {
         physics.setVelocityY(-movementSpeed);
     }
 
+    public void upEnd() {
+        direction = "up";
+        physics.setVelocityY(idleSpeed);
+    }
+
     public void down() {
         direction = "down";
         physics.setVelocityY(movementSpeed);
+    }
+
+    public void downEnd() {
+        direction = "down";
+        physics.setVelocityY(idleSpeed);
     }
 }
