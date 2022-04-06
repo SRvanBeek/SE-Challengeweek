@@ -1,12 +1,8 @@
-import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.physics.PhysicsComponent;
-import com.almasb.fxgl.texture.AnimationChannel;
-
 import com.almasb.fxgl.texture.AnimatedTexture;
-import javafx.scene.image.Image;
+import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.util.Duration;
-
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.image;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.texture;
@@ -19,7 +15,7 @@ public class Player extends Component {
     private int power = 1;
     private int health;
 
-    private PhysicsComponent physics = new PhysicsComponent();
+    private PhysicsComponent physics;
     private AnimatedTexture texture;
     private String direction;
 
@@ -84,10 +80,6 @@ public class Player extends Component {
     }
 
 
-
-
-
-
     public String getName() {
             return this.name;
         }
@@ -99,30 +91,3 @@ public class Player extends Component {
     public int getPower() {
             return this.power;
         }
-
-    public int getBombCount() {
-            return this.bombCount;
-        }
-
-    public void setName(String name) {
-            this.name = name;
-        }
-
-    public void setHealth(int health) {
-            this.health = health;
-        }
-
-    public void setPower(int power) {
-            this.power = power;
-        }
-
-    public void setSpeed(int speed) {
-            this.speed = speed;
-        }
-
-    public void setBombCount(int bombCount) {
-            this.bombCount = bombCount;
-        }
-    }
-
-
