@@ -7,22 +7,20 @@ import com.almasb.fxgl.physics.CollisionHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.concurrent.ThreadLocalRandom;
+
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 
 
 public class Game extends GameApplication {
-
-    // test if push works (by Stan)
-
-    private Entity player;
-    private int speed = 2;
+    private Entity player1;
     private ArrayList<Entity> walls = new ArrayList<>();
     private int width = 960;
     private int height = 832;
+    private final BombermanFactory bombermanFactory = new BombermanFactory();
 
 
     @Override
@@ -35,13 +33,18 @@ public class Game extends GameApplication {
 
     @Override
     protected void initGame() {
-        player = FXGL.entityBuilder()
-                .at(65, 65)
-                .viewWithBBox("BombermanBlond2.png")
+        getGameWorld().addEntityFactory(bombermanFactory);
+        player1 = spawn("player", 40, 40);
+
+
+        Entity speedUp = FXGL.entityBuilder()
+                .at(130, 96)
+                .viewWithBBox(new Rectangle(32, 32, Color.YELLOW))
                 .with(new CollidableComponent(true))
-                .scale(1,1)
-                .type(EntityTypes.PLAYER)
+                .type(EntityTypes.ITEM)
+                .zIndex(10)
                 .buildAndAttach();
+
 
         //outside walls
         Entity wall1 = FXGL.entityBuilder()
@@ -79,7 +82,6 @@ public class Game extends GameApplication {
                 .buildAndAttach();
 
         walls.add(wall4);
-
 
 
         //inner walls
@@ -132,20 +134,27 @@ public class Game extends GameApplication {
         FXGL.getGameScene().setBackgroundColor(Color.BLACK);
     }
 
+    @Override
+    protected void onUpdate(double tpf) {
+        System.out.println(player1.getComponent(Player.class).getSpeed());
+    }
+
     public void objCrash(String input) {
-        for (Entity wall : walls) {
-            if (player.isColliding(wall)) {
+        int speed = player1.getComponent(Player.class).getSpeed();
+
+        for (int i = 0; i < walls.size(); i++) {
+            if (player1.isColliding(walls.get(i))) {
                 if (Objects.equals(input, "W")) {
-                    player.translateY(speed);
+                    player1.translateY(speed);
                 }
                 if (Objects.equals(input, "S")) {
-                    player.translateY(-speed);
+                    player1.translateY(-speed);
                 }
                 if (Objects.equals(input, "A")) {
-                    player.translateX(speed);
+                    player1.translateX(speed);
                 }
                 if (Objects.equals(input, "D")) {
-                    player.translateX(-speed);
+                    player1.translateX(-speed);
                 }
             }
         }
@@ -154,25 +163,34 @@ public class Game extends GameApplication {
 
     @Override
     protected void initInput() {
+        getGameWorld().addEntityFactory(bombermanFactory);
+        player1 = spawn("player", 40, 40);
+
+
         FXGL.onKey(KeyCode.W, () -> {
-            player.translateY(-speed);
+            player1.translateY(-player1.getComponent(Player.class).getSpeed());
             objCrash("W");
         });
 
         FXGL.onKey(KeyCode.S, () -> {
-            player.translateY(speed);
+            player1.translateY(player1.getComponent(Player.class).getSpeed());
             objCrash("S");
         });
 
         FXGL.onKey(KeyCode.A, () -> {
-            player.translateX(-speed);
+            player1.translateX(-player1.getComponent(Player.class).getSpeed());
             objCrash("A");
         });
 
         FXGL.onKey(KeyCode.D, () -> {
-            player.translateX(speed);
+            player1.translateX(player1.getComponent(Player.class).getSpeed());
             objCrash("D");
         });
+    }
+
+    public void setScene() {
+        getGameWorld().addEntityFactory(bombermanFactory);
+        player1 = spawn("player", 40, 40);
     }
 
     @Override
@@ -181,6 +199,13 @@ public class Game extends GameApplication {
             @Override
             protected void onCollision(Entity player, Entity block) {
 
+            }
+        });
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.ITEM) {
+            @Override
+            protected void onCollision(Entity player, Entity item) {
+                player1.getComponent(Player.class).setSpeed(player1.getComponent(Player.class).getSpeed() + 1);
+                item.removeFromWorld();
             }
         });
     }

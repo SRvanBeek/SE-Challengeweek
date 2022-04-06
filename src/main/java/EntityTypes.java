@@ -1,3 +1,3 @@
 public enum EntityTypes {
-    PLAYER, FIXEDBLOCK
+    PLAYER, FIXEDBLOCK, ITEM
 }
