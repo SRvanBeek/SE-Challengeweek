@@ -1,13 +1,11 @@
-import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
-
 import static com.almasb.fxgl.dsl.FXGLForKtKt.image;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.texture;
+
 
 public class Player extends Component {
     private Entity player;
@@ -16,23 +14,31 @@ public class Player extends Component {
     private int bombCount = 1;
     private int power = 1;
     private int health;
+    private int playerNumber;
 
+    private AnimationChannel initialAnimation;
     private PhysicsComponent physics;
     private AnimatedTexture texture;
     private String direction;
 
+
     public Player() {
-        AnimationChannel initialAnimation = new AnimationChannel(
-                image("BombermanBlondVSpritesheet.png"),
-                2,
-                72,
-                72,
+        this.initialAnimation = new AnimationChannel(
+                image("player_1" + "_move_down.png"),
+                4,
+                31,
+                41,
                 Duration.seconds(1),
                 0,
                 1
         );
         texture = new AnimatedTexture(initialAnimation);
-        texture.loop();
+    }
+
+
+    @Override
+    public void onAdded(){
+        entity.getViewComponent().addChild(texture);
     }
 
     public Image getAnimationOnMovement() {
@@ -40,9 +46,10 @@ public class Player extends Component {
 
         animationName += physics.isMovingX() || physics.isMovingY() ? "move" : "idle";
 
+        String animationName = "player_" + playerNumber;
+        animationName += physics.isMovingX() || physics.isMovingY() ? "move_" : "idle_";
         animationName += direction;
-
-        return (new Image("BombermanBlondVSpritesheet.png"));
+        return (new Image(animationName));
     }
 
     @Override

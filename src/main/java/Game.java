@@ -24,6 +24,7 @@ public class Game extends GameApplication {
     private final BombermanFactory bombermanFactory = new BombermanFactory();
 
 
+
     @Override
     protected void initSettings(GameSettings gameSettings) {
         gameSettings.setWidth(15 * 70);
