@@ -12,6 +12,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 import java.util.Objects;
+
+import static com.almasb.fxgl.dsl.FXGL.getInput;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 
@@ -45,6 +47,7 @@ public class Game extends GameApplication {
 
     @Override
     protected void initInput() {
+        //move up
         getInput().addAction(new UserAction("up") {
             @Override
             protected void onAction() {
@@ -59,6 +62,7 @@ public class Game extends GameApplication {
             }
         }, KeyCode.W, VirtualButton.UP);
 
+        //move down
         getInput().addAction(new UserAction("down") {
             @Override
             protected void onAction() {
@@ -73,6 +77,7 @@ public class Game extends GameApplication {
             }
         }, KeyCode.S, VirtualButton.DOWN);
 
+        //move left
         getInput().addAction(new UserAction("left") {
             @Override
             protected void onAction() {
@@ -87,6 +92,7 @@ public class Game extends GameApplication {
             }
         }, KeyCode.A, VirtualButton.LEFT);
 
+        //move right
         getInput().addAction(new UserAction("right") {
             @Override
             protected void onAction() {
@@ -100,6 +106,14 @@ public class Game extends GameApplication {
                 player1.getComponent(Player.class).stopXMovement();
             }
         }, KeyCode.D, VirtualButton.RIGHT);
+
+        //place bomb
+        getInput().addAction(new UserAction("Place Bomb") {
+            @Override
+            protected void onActionBegin() {
+                player1.getComponent(Player.class).placeBomb();
+            }
+        }, KeyCode.F);
     }
 
 
@@ -115,6 +129,7 @@ public class Game extends GameApplication {
             }
         });
     }
+
 
     public static void main(String[] args) {
         launch(args);
