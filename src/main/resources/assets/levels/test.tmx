@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.0.1" orientation="orthogonal" renderorder="right-down" width="15" height="10" tilewidth="70" tileheight="70" nextobjectid="7">
+ <tileset firstgid="1" name="tiles_spritesheet" tilewidth="70" tileheight="70" spacing="2" tilecount="156" columns="12">
+  <image source="../Pictures/tiles_spritesheet.png" width="914" height="936"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="15" height="10">
+  <data encoding="csv">
+73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,
+73,0,0,133,0,133,0,133,0,133,0,133,0,0,73,
+73,0,128,0,128,0,128,0,128,0,128,0,128,0,73,
+73,133,0,133,0,133,0,133,0,133,0,133,0,133,73,
+73,0,128,0,128,0,128,0,128,0,128,0,128,0,73,
+73,0,128,0,128,0,128,0,128,0,128,0,128,0,73,
+73,133,0,133,0,133,0,133,0,133,0,133,0,133,73,
+73,0,128,0,128,0,128,0,128,0,128,0,128,0,73,
+73,0,0,133,0,133,0,133,0,133,0,133,0,0,73,
+73,73,73,73,73,73,73,73,73,73,73,73,73,73,73
+</data>
+ </layer>
+ <objectgroup name="Object Layer 1">
+  <object id="3" name="platform" type="platform" x="57.3333" y="66.6667" width="940"/>
+  <object id="4" name="platform" type="platform" x="981.333" y="64" width="1.33333" height="573.333"/>
+  <object id="5" name="platform" type="platform" x="42.6667" y="630.667" width="950.667"/>
+  <object id="6" name="platform" type="platform" x="64" y="57.3333" width="1.33333" height="586.667"/>
+ </objectgroup>
+</map>

@@ -25,6 +25,7 @@ public class Factory implements EntityFactory {
                 .build();
     }
 
+
     @Spawns("player")
     public Entity newPlayer(SpawnData data) {
         PhysicsComponent physics = new PhysicsComponent();
@@ -49,6 +50,7 @@ public class Factory implements EntityFactory {
                 .with(new Player())
                 .build();
     }
+
 
     @Spawns("coin")
     public Entity newCoin(SpawnData data) {
