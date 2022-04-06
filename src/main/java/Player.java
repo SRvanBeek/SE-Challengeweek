@@ -10,12 +10,14 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.image;
 public class Player extends Component {
 
     private Integer movementSpeed = 200;
+    private Integer idleSpeed = 0;
     private String direction = " ";
     private int playerNumber;
 
+    private AnimationChannel initialAnimation;
     private PhysicsComponent physics;
     private AnimatedTexture texture;
-    private AnimationChannel initialAnimation;
+
 
     public Player() {
         this.initialAnimation = new AnimationChannel(
@@ -28,8 +30,8 @@ public class Player extends Component {
                 0
         );
         texture = new AnimatedTexture(initialAnimation);
-
     }
+
 
     @Override
     public void onAdded(){
@@ -49,6 +51,11 @@ public class Player extends Component {
         physics.setVelocityX(-movementSpeed);
     }
 
+    public void leftEnd() {
+        direction = "left";
+        physics.setVelocityX(idleSpeed);
+    }
+
 
     public void right() {
         direction = "right";
@@ -57,7 +64,7 @@ public class Player extends Component {
 
     public void rightEnd() {
         direction = "right";
-        physics.setVelocityX(movementSpeed = 0);
+        physics.setVelocityX(idleSpeed);
     }
 
 
@@ -66,12 +73,18 @@ public class Player extends Component {
         physics.setVelocityY(-movementSpeed);
     }
 
+    public void upEnd() {
+        direction = "up";
+        physics.setVelocityY(idleSpeed);
+    }
+
     public void down() {
         direction = "down";
         physics.setVelocityY(movementSpeed);
     }
 
-    public void setPlayerNumber(int playerNumber) {
-        this.playerNumber = playerNumber;
+    public void downEnd() {
+        direction = "down";
+        physics.setVelocityY(idleSpeed);
     }
 }

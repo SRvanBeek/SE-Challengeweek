@@ -42,10 +42,10 @@ public class Factory implements EntityFactory {
         physics.setFixtureDef(new FixtureDef().friction(0.0f));
 
         return FXGL.entityBuilder(data)
+                .at(60, 60)
                 .type(EntityTypes.PLAYER)
                 .bbox(new HitBox(new Point2D(0, 0), BoundingShape.circle(36)))
                 .with(new CollidableComponent(true))
-                //.viewWithBBox(new Rectangle(30, 30, Color.RED))
                 .with(physics)
                 .with(new Player())
                 .build();
