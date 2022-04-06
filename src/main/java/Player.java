@@ -24,18 +24,21 @@ public class Player extends Component {
     private AnimationChannel initialAnimation;
     private AnimationChannel newAnimation;
 
+    Image image = image("player_1_move_down.png");
+
 
     public Player() {
         this.initialAnimation = new AnimationChannel(
-                image("player_1_move_down.png"),
+                image,
                 4,
                 31,
                 41,
                 Duration.seconds(1),
                 0,
-                0
+                3
         );
         texture = new AnimatedTexture(initialAnimation);
+        texture.loop();
     }
 
 
@@ -66,10 +69,19 @@ public class Player extends Component {
         return animationName;
     }
 
+//    @Override
+//    public void onUpdate(double tpf) {
+//        if(physics.isMovingX() || physics.isMovingY()){
+//            animationMoving();
+//        }
+//    }
+
     @Override
     public void onUpdate(double tpf) {
-        if(physics.isMovingX() || physics.isMovingY()){
-            animationMoving();
+        Image chosenAnimationImage = image(getAnimationOnMovement());
+        if (chosenAnimationImage != texture.getImage()) {
+            image = chosenAnimationImage;
+            texture.setImage(image);
         }
     }
 
@@ -80,7 +92,7 @@ public class Player extends Component {
     }
 
     public void right() {
-        direction = "left";
+        direction = "right";
         physics.setVelocityX(speed);
     }
 
@@ -99,7 +111,7 @@ public class Player extends Component {
     }
 
     public void stopXMovement() {
-        physics.setVelocityY(0);
+        physics.setVelocityX(0);
     }
 
 
