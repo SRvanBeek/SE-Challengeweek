@@ -17,45 +17,62 @@ public class Player extends Component {
     private int health;
     private int playerNumber;
 
-    private AnimationChannel initialAnimation;
     private PhysicsComponent physics;
     private AnimatedTexture texture;
     private String direction;
 
+    private AnimationChannel initialAnimation;
+    private AnimationChannel newAnimation;
+
 
     public Player() {
         this.initialAnimation = new AnimationChannel(
-                image("player_1" + "_move_down.png"),
+                image("player_1_move_down.png"),
                 4,
                 31,
                 41,
                 Duration.seconds(1),
                 0,
-                1
+                0
         );
         texture = new AnimatedTexture(initialAnimation);
     }
 
 
+
+    public void animationMoving(){
+        this.newAnimation = new AnimationChannel(
+                image(getAnimationOnMovement()),
+                4,
+                31,
+                41,
+                Duration.seconds(1),
+                1,
+                3
+
+        );
+        texture = new AnimatedTexture(newAnimation);
+        texture.loop();
+    }
+
     @Override
     public void onAdded(){
         entity.getViewComponent().addChild(texture);
     }
-
-    public Image getAnimationOnMovement() {
-        String animationName = "player_" + playerNumber;
-        animationName += physics.isMovingX() || physics.isMovingY() ? "move_" : "idle_";
-        animationName += direction;
-        return (new Image(animationName));
+    public String getAnimationOnMovement() {
+        String animationName = "player_1" + "_move_";
+        //animationName += physics.isMovingX() || physics.isMovingY() ? "move_" : "idle_";
+        animationName += direction + ".png";
+        return animationName;
     }
 
     @Override
     public void onUpdate(double tpf) {
-        Image chosenAnimationImage = getAnimationOnMovement();
-        if (chosenAnimationImage != texture.getImage()) {
-            texture.setImage(chosenAnimationImage);
+        if(physics.isMovingX() || physics.isMovingY()){
+            animationMoving();
         }
     }
+
 
     public void left() {
         direction = "left";
