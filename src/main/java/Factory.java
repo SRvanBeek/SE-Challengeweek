@@ -44,7 +44,7 @@ public class Factory implements EntityFactory {
                 .type(EntityTypes.PLAYER)
                 .bbox(new HitBox(new Point2D(0, 0), BoundingShape.circle(36)))
                 .with(new CollidableComponent(true))
-                .viewWithBBox(new Rectangle(30, 30, Color.RED))
+                //.viewWithBBox(new Rectangle(30, 30, Color.RED))
                 .with(physics)
                 .with(new Player())
                 .build();

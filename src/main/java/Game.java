@@ -11,12 +11,13 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class Game extends GameApplication {
 
-    private Entity player;
+    private Entity player1;
 
     @Override
     protected void initSettings(GameSettings gameSettings) {
         gameSettings.setWidth(15 * 70);
         gameSettings.setHeight(10 * 70);
+        gameSettings.setDeveloperMenuEnabled(true);
     }
 
     @Override
@@ -24,10 +25,11 @@ public class Game extends GameApplication {
         getGameWorld().addEntityFactory(new Factory());
         FXGL.setLevelFromMap("mario.tmx");
 
-        player = getGameWorld().spawn("player");
+        player1 = getGameWorld().spawn("player");
+        player1.getComponent(Player.class).setPlayerNumber(1);
 
         Viewport viewport = getGameScene().getViewport();
-        viewport.bindToEntity(player, getAppWidth() /2.0, getAppHeight() /2.0);
+        viewport.bindToEntity(player1, getAppWidth() /2.0, getAppHeight() /2.0);
         viewport.setLazy(true);
     }
 
@@ -39,7 +41,7 @@ public class Game extends GameApplication {
             @Override
             protected void onAction() {
                 super.onAction();
-                player.getComponent(Player.class).right();
+                player1.getComponent(Player.class).right();
             }
         }, KeyCode.D, VirtualButton.RIGHT);
 
@@ -59,7 +61,7 @@ public class Game extends GameApplication {
             @Override
             protected void onAction() {
                 super.onAction();
-                player.getComponent(Player.class).left();
+                player1.getComponent(Player.class).left();
             }
         }, KeyCode.A, VirtualButton.LEFT);
 
@@ -69,9 +71,9 @@ public class Game extends GameApplication {
             @Override
             protected void onAction() {
                 super.onAction();
-                player.getComponent(Player.class).up();
+                player1.getComponent(Player.class).up();
             }
-        }, KeyCode.W, VirtualButton.LEFT);
+        }, KeyCode.W, VirtualButton.UP);
 
 
         // Leest input voor naar beneden
@@ -79,9 +81,9 @@ public class Game extends GameApplication {
             @Override
             protected void onAction() {
                 super.onAction();
-                player.getComponent(Player.class).down();
+                player1.getComponent(Player.class).down();
             }
-        }, KeyCode.S, VirtualButton.LEFT);
+        }, KeyCode.S, VirtualButton.DOWN);
     }
 
 

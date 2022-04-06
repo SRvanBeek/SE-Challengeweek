@@ -11,26 +11,33 @@ public class Player extends Component {
 
     private Integer movementSpeed = 200;
     private String direction = " ";
+    private int playerNumber;
 
     private PhysicsComponent physics;
     private AnimatedTexture texture;
+    private AnimationChannel initialAnimation;
 
     public Player() {
-        AnimationChannel initialAnimation = new AnimationChannel(
-                image("player_idle_" + direction + ".png"),
-                2,
-                72,
-                72,
+        this.initialAnimation = new AnimationChannel(
+                image("player_1" + "_move_DOWN.png"),
+                4,
+                31,
+                41,
                 Duration.seconds(1),
                 0,
-                1
+                0
         );
         texture = new AnimatedTexture(initialAnimation);
-        texture.loop();
+
+    }
+
+    @Override
+    public void onAdded(){
+        entity.getViewComponent().addChild(texture);
     }
 
     public Image getAnimationOnMovement() {
-        String animationName = "player_";
+        String animationName = "player_" + playerNumber;
         animationName += physics.isMovingX() || physics.isMovingY() ? "move_" : "idle_";
         animationName += direction;
         return (new Image(animationName));
@@ -62,5 +69,9 @@ public class Player extends Component {
     public void down() {
         direction = "down";
         physics.setVelocityY(movementSpeed);
+    }
+
+    public void setPlayerNumber(int playerNumber) {
+        this.playerNumber = playerNumber;
     }
 }
