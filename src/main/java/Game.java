@@ -24,7 +24,6 @@ public class Game extends GameApplication {
     private int height = 832;
     private final BombermanFactory bombermanFactory = new BombermanFactory();
 
-    private Entity player;
 
     @Override
     protected void initSettings(GameSettings gameSettings) {
@@ -35,7 +34,7 @@ public class Game extends GameApplication {
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new Factory());
-        FXGL.setLevelFromMap("mario.tmx");
+        FXGL.setLevelFromMap("test.tmx");
 
         player = getGameWorld().spawn("player");
 
