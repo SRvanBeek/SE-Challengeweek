@@ -1,5 +1,6 @@
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.components.CollidableComponent;
@@ -9,10 +10,8 @@ import com.almasb.fxgl.physics.CollisionHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-
 import java.util.ArrayList;
 import java.util.Objects;
-
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 
@@ -33,13 +32,13 @@ public class Game extends GameApplication {
 
     @Override
     protected void initGame() {
-        getGameWorld().addEntityFactory(new Factory());
+        getGameWorld().addEntityFactory(new BombermanFactory());
         FXGL.setLevelFromMap("test.tmx");
 
-        player = getGameWorld().spawn("player");
+        player1 = getGameWorld().spawn("player1");
 
         Viewport viewport = getGameScene().getViewport();
-        viewport.bindToEntity(player, getAppWidth() /2.0, getAppHeight() /2.0);
+        viewport.bindToEntity(player1, getAppWidth() /2.0, getAppHeight() /2.0);
         viewport.setLazy(true);
     }
 
@@ -49,14 +48,12 @@ public class Game extends GameApplication {
             @Override
             protected void onAction() {
                 super.onAction();
-                System.out.println("pressed up");
                 player1.getComponent(Player.class).up();
             }
 
             @Override
             protected void onActionEnd() {
                 super.onActionEnd();
-                System.out.printf("release up");
                 player1.getComponent(Player.class).stopYMovement();
             }
         }, KeyCode.W, VirtualButton.UP);
@@ -65,14 +62,12 @@ public class Game extends GameApplication {
             @Override
             protected void onAction() {
                 super.onAction();
-                System.out.println("pressed up");
                 player1.getComponent(Player.class).down();
             }
 
             @Override
             protected void onActionEnd() {
                 super.onActionEnd();
-                System.out.printf("release up");
                 player1.getComponent(Player.class).stopYMovement();
             }
         }, KeyCode.S, VirtualButton.DOWN);
@@ -81,14 +76,12 @@ public class Game extends GameApplication {
             @Override
             protected void onAction() {
                 super.onAction();
-                System.out.println("pressed up");
                 player1.getComponent(Player.class).left();
             }
 
             @Override
             protected void onActionEnd() {
                 super.onActionEnd();
-                System.out.printf("release up");
                 player1.getComponent(Player.class).stopXMovement();
             }
         }, KeyCode.A, VirtualButton.LEFT);
@@ -97,14 +90,12 @@ public class Game extends GameApplication {
             @Override
             protected void onAction() {
                 super.onAction();
-                System.out.println("pressed up");
                 player1.getComponent(Player.class).right();
             }
 
             @Override
             protected void onActionEnd() {
                 super.onActionEnd();
-                System.out.printf("release up");
                 player1.getComponent(Player.class).stopXMovement();
             }
         }, KeyCode.D, VirtualButton.RIGHT);

@@ -1,7 +1,9 @@
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
+import javafx.scene.image.Image;
 import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.image;
@@ -10,7 +12,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.texture;
 public class Player extends Component {
     private Entity player;
     private String name;
-    private int speed = 1;
+    private int speed = 100;
     private int bombCount = 1;
     private int power = 1;
     private int health;
@@ -21,7 +23,7 @@ public class Player extends Component {
 
     public Player() {
         AnimationChannel initialAnimation = new AnimationChannel(
-                image("player_idle_" + direction + ".png"),
+                image("BombermanBlondVSpritesheet.png"),
                 2,
                 72,
                 72,
@@ -40,16 +42,16 @@ public class Player extends Component {
 
         animationName += direction;
 
-        return (new Image(animationName));
+        return (new Image("BombermanBlondVSpritesheet.png"));
     }
 
-   // @Override
-//    public void onUpdate(double tpf) {
-//        Image chosenAnimationImage = getAnimationOnMovement();
-//        if (chosenAnimationImage != texture.getAnimationChannel()) {
-//            texture.loopAnimationChannel(image(chosenAnimationImage));
-//        }
-//    }
+    @Override
+    public void onUpdate(double tpf) {
+        Image chosenAnimationImage = getAnimationOnMovement();
+        if (chosenAnimationImage != texture.getImage()) {
+            texture.setImage(chosenAnimationImage);
+        }
+    }
 
     public void left() {
         direction = "left";
@@ -81,13 +83,18 @@ public class Player extends Component {
 
 
     public String getName() {
-            return this.name;
-        }
+        return this.name;
+    }
 
     public int getSpeed() {
-            return this.speed;
-        }
+        return this.speed;
+    }
 
     public int getPower() {
-            return this.power;
-        }
+        return this.power;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+}
