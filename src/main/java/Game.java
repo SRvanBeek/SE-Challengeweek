@@ -3,6 +3,8 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.input.UserAction;
+import com.almasb.fxgl.input.virtual.VirtualButton;
 import com.almasb.fxgl.physics.CollisionHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -11,12 +13,12 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 
 public class Game extends GameApplication {
     private Entity player1;
+    private Entity player2;
     private ArrayList<Entity> walls = new ArrayList<>();
     private int width = 960;
     private int height = 832;
@@ -34,7 +36,10 @@ public class Game extends GameApplication {
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(bombermanFactory);
-        player1 = spawn("player", 40, 40);
+        player1 = spawn("player1", 75, 75);
+        player2 = spawn("player2", 850, 712);
+
+        player1.getComponent(Player.class).up();
 
 
         Entity speedUp = FXGL.entityBuilder()
@@ -163,38 +168,103 @@ public class Game extends GameApplication {
 
     @Override
     protected void initInput() {
-        getGameWorld().addEntityFactory(bombermanFactory);
-        player1 = spawn("player", 40, 40);
+        getInput().addAction(new UserAction("up") {
+            @Override
+            protected void onAction() {
+                super.onAction();
+                System.out.println("pressed up");
+                player1.getComponent(Player.class).up();
+            }
+
+            @Override
+            protected void onActionEnd() {
+                super.onActionEnd();
+                System.out.printf("release up");
+                player1.getComponent(Player.class).stopYMovement();
+            }
+        }, KeyCode.W, VirtualButton.UP);
+
+        getInput().addAction(new UserAction("down") {
+            @Override
+            protected void onAction() {
+                super.onAction();
+                System.out.println("pressed up");
+                player1.getComponent(Player.class).down();
+            }
+
+            @Override
+            protected void onActionEnd() {
+                super.onActionEnd();
+                System.out.printf("release up");
+                player1.getComponent(Player.class).stopYMovement();
+            }
+        }, KeyCode.S, VirtualButton.DOWN);
+
+        getInput().addAction(new UserAction("left") {
+            @Override
+            protected void onAction() {
+                super.onAction();
+                System.out.println("pressed up");
+                player1.getComponent(Player.class).left();
+            }
+
+            @Override
+            protected void onActionEnd() {
+                super.onActionEnd();
+                System.out.printf("release up");
+                player1.getComponent(Player.class).stopXMovement();
+            }
+        }, KeyCode.A, VirtualButton.LEFT);
+
+        getInput().addAction(new UserAction("right") {
+            @Override
+            protected void onAction() {
+                super.onAction();
+                System.out.println("pressed up");
+                player1.getComponent(Player.class).right();
+            }
+
+            @Override
+            protected void onActionEnd() {
+                super.onActionEnd();
+                System.out.printf("release up");
+                player1.getComponent(Player.class).stopXMovement();
+            }
+        }, KeyCode.D, VirtualButton.RIGHT);
 
 
-        FXGL.onKey(KeyCode.W, () -> {
-            player1.translateY(-player1.getComponent(Player.class).getSpeed());
-            objCrash("W");
-        });
 
-        FXGL.onKey(KeyCode.S, () -> {
-            player1.translateY(player1.getComponent(Player.class).getSpeed());
-            objCrash("S");
-        });
+//        getGameWorld().addEntityFactory(bombermanFactory);
+//        player1 = spawn("player1", 40, 40);
+//
+//
+//        FXGL.onKey(KeyCode.W, () -> {
+//            player1.translateY(-player1.getComponent(Player.class).getSpeed());
+//            objCrash("W");
+//        });
+//
+//        FXGL.onKey(KeyCode.S, () -> {
+//            player1.translateY(player1.getComponent(Player.class).getSpeed());
+//            objCrash("S");
+//        });
+//
+//        FXGL.onKey(KeyCode.A, () -> {
+//            player1.translateX(-player1.getComponent(Player.class).getSpeed());
+//            objCrash("A");
+//        });
+//
+//        FXGL.onKey(KeyCode.D, () -> {
+//            player1.translateX(player1.getComponent(Player.class).getSpeed());
+//            objCrash("D");
+//        });
+        }
 
-        FXGL.onKey(KeyCode.A, () -> {
-            player1.translateX(-player1.getComponent(Player.class).getSpeed());
-            objCrash("A");
-        });
 
-        FXGL.onKey(KeyCode.D, () -> {
-            player1.translateX(player1.getComponent(Player.class).getSpeed());
-            objCrash("D");
-        });
-    }
-
-    public void setScene() {
-        getGameWorld().addEntityFactory(bombermanFactory);
-        player1 = spawn("player", 40, 40);
-    }
 
     @Override
     protected void initPhysics() {
+        FXGL.getPhysicsWorld().setGravity(0, 0);
+
         FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.FIXEDBLOCK) {
             @Override
             protected void onCollision(Entity player, Entity block) {
