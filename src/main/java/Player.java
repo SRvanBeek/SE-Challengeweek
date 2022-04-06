@@ -1,3 +1,4 @@
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
@@ -42,10 +43,6 @@ public class Player extends Component {
     }
 
     public Image getAnimationOnMovement() {
-        String animationName = "player_";
-
-        animationName += physics.isMovingX() || physics.isMovingY() ? "move" : "idle";
-
         String animationName = "player_" + playerNumber;
         animationName += physics.isMovingX() || physics.isMovingY() ? "move_" : "idle_";
         animationName += direction;

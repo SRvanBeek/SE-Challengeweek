@@ -16,6 +16,14 @@ import javafx.geometry.Point2D;
 public class BombermanFactory implements EntityFactory {
         public BombermanFactory() {
         }
+        @Spawns("platform")
+        public Entity newPlatform(SpawnData data) {
+            return FXGL.entityBuilder(data)
+                    .type(EntityTypes.PLATFORM)
+                    .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+                    .with(new PhysicsComponent())
+                    .build();
+    }
 
         @Spawns("player1")
         public Entity newPlayer1(SpawnData data) {
@@ -32,13 +40,13 @@ public class BombermanFactory implements EntityFactory {
 
             physics.setFixtureDef(new FixtureDef().friction(0.0f));
 
-            return FXGL.entityBuilder()
-                    .from(data)
-                    .viewWithBBox("BombermanBlond2.png")
-                    .with(new CollidableComponent(true))
-                    .with(new Player())
-                    .scale(1.4, 1.4)
+            return FXGL.entityBuilder(data)
+                    .at(60, 60)
                     .type(EntityTypes.PLAYER)
+                    .bbox(new HitBox(new Point2D(0, 0), BoundingShape.circle(36)))
+                    .with(new CollidableComponent(true))
+                    .with(physics)
+                    .with(new Player())
                     .build();
         }
 
@@ -56,13 +64,13 @@ public class BombermanFactory implements EntityFactory {
             );
 
             physics.setFixtureDef(new FixtureDef().friction(0.0f));
-            return FXGL.entityBuilder()
-                    .from(data)
-                    .viewWithBBox("BombermanBlond2.png")
-                    .with(new CollidableComponent(true))
-                    .with(new Player())
-                    .scale(1.4, 1.4)
+            return FXGL.entityBuilder(data)
+                    .at(60, 60)
                     .type(EntityTypes.PLAYER)
+                    .bbox(new HitBox(new Point2D(0, 0), BoundingShape.circle(36)))
+                    .with(new CollidableComponent(true))
+                    .with(physics)
+                    .with(new Player())
                     .build();
         }
 
