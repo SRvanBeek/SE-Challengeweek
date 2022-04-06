@@ -92,7 +92,6 @@ public class BombermanFactory implements EntityFactory {
                     .from(data)
                     .viewWithBBox("sprite.png")
                     .with(new PhysicsComponent())
-                    .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"),data.<Integer>get("Height"))))
                     .scale(0.4D, 0.4D)
                     .type(EntityTypes.PLAYER)
                     .build();
