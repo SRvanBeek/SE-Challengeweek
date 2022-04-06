@@ -1,53 +1,54 @@
-import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.physics.PhysicsComponent;
+import com.almasb.fxgl.texture.AnimatedTexture;
+import com.almasb.fxgl.texture.AnimationChannel;
+import javafx.util.Duration;
+
+import static com.almasb.fxgl.dsl.FXGLForKtKt.image;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.texture;
 
 public class Player extends Component {
-    private Entity player;
-    private String name;
-    private int speed = 1;
-    private int bombCount = 1;
-    private int power = 1;
-    private int health;
+
+    private Integer movementSpeed = 200;
+    private String direction = " ";
+
+    private PhysicsComponent physics;
+    private AnimatedTexture texture;
 
     public Player() {
-
-    }
-
-    public String getName() {
-            return this.name;
-        }
-
-    public int getSpeed() {
-            return this.speed;
-        }
-
-    public int getPower() {
-            return this.power;
-        }
-
-    public int getBombCount() {
-            return this.bombCount;
-        }
-
-    public void setName(String name) {
-            this.name = name;
-        }
-
-    public void setHealth(int health) {
-            this.health = health;
-        }
-
-    public void setPower(int power) {
-            this.power = power;
-        }
-
-    public void setSpeed(int speed) {
-            this.speed = speed;
-        }
-
-    public void setBombCount(int bombCount) {
-            this.bombCount = bombCount;
-        }
+        AnimationChannel initialAnimation = new AnimationChannel(
+                image("player_idle_" + direction + ".png"),
+                2,
+                72,
+                72,
+                Duration.seconds(1),
+                0,
+                1
+        );
+        texture = new AnimatedTexture(initialAnimation);
+        texture.loop();
     }
 
 
+    public void left() {
+        direction = "left";
+        physics.setVelocityX(-movementSpeed);
+    }
+
+
+    public void right() {
+        direction = "right";
+        physics.setVelocityX(movementSpeed);
+    }
+
+
+    public void up() {
+        direction = "up";
+        physics.setVelocityY(-movementSpeed);
+    }
+
+    public void down() {
+        direction = "down";
+        physics.setVelocityY(movementSpeed);
+    }
+}
