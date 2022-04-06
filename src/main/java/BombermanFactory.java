@@ -43,7 +43,7 @@ public class BombermanFactory implements EntityFactory {
             return FXGL.entityBuilder(data)
                     .at(60, 60)
                     .type(EntityTypes.PLAYER)
-                    .bbox(new HitBox(new Point2D(0, 0), BoundingShape.circle(36)))
+                    .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(31, 41)))
                     .with(new CollidableComponent(true))
                     .with(physics)
                     .with(new Player())
@@ -88,12 +88,27 @@ public class BombermanFactory implements EntityFactory {
 
         @Spawns("bomb")
         public Entity newBomb(SpawnData data) {
+            PhysicsComponent physics = new PhysicsComponent();
+            physics.setBodyType(BodyType.DYNAMIC);
+
+            physics.addGroundSensor(
+                    new HitBox(
+                            "GROUND_SENSOR",
+                            new Point2D(16, 38),
+                            BoundingShape.box(6, 8)
+                    )
+            );
+
+            physics.setFixtureDef(new FixtureDef().friction(0.0f));
+
             return FXGL.entityBuilder()
                     .from(data)
-                    .viewWithBBox("sprite.png")
-                    .with(new PhysicsComponent())
-                    .scale(0.4D, 0.4D)
-                    .type(EntityTypes.PLAYER)
+                    .viewWithBBox("box-1.png")
+                    .with(physics)
+                    .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(64, 64)))
+                    .with(new Bomb(data.get("radius")))
+                    .scale(1, 1)
+                    .type(EntityTypes.BOMB)
                     .build();
         }
     }

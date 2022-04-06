@@ -24,8 +24,8 @@ public class Player extends Component {
     private AStarMoveComponent astar;
 
 
-    private int speed = 100;
-    private int bombCount = 1;
+    private int speed = 200;
+    private int bombCount = 4;
     private int bombsPlaced = 0;
     private int power = 1;
     private int health;
@@ -133,12 +133,12 @@ public class Player extends Component {
         }
         bombsPlaced++;
 
-        Entity bomb = spawn("bomb", new SpawnData(entity.getX(), entity.getY()));
+        Entity bomb = spawn("bomb", new SpawnData(entity.getX(), entity.getY()).put("radius", power));
 
         getGameTimer().runOnceAfter(() -> {
             bomb.getComponent(Bomb.class).explode();
             bombsPlaced--;
-        }, Duration.seconds(2));
+        }, Duration.seconds(20));
     }
 
     public String getName() {
