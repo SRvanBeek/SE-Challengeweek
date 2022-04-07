@@ -50,6 +50,8 @@ public class Game extends GameApplication {
 
 
         FXGL.loopBGM("BGM.wav");
+
+        Entity box = getGameWorld().spawn("eBlock", new SpawnData(64, 128).put("viewbox", "box-1.png"));
     }
 
     public ArrayList getTileCoordinates(double playerX, double playerY) {
