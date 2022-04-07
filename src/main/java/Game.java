@@ -14,6 +14,9 @@ import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
 import javafx.geometry.Point2D;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -54,13 +57,17 @@ public class Game extends GameApplication {
                 Entity box = getGameWorld().spawn("eBlock", new SpawnData(64 * i + 64, 128 * j + 64).put("viewbox", "box-1.png"));
                 int spawnrate = (int) (Math.random() * 7);
                 if (spawnrate < 3) {
-                    switch (spawnrate) {
-                        case 0:
-                            getGameWorld().spawn("speed_up", new SpawnData(box.getX(), box.getY()));
-                        case 1:
-                            getGameWorld().spawn("power_up", new SpawnData(box.getX(), box.getY()));
-                        case 2:
+                    if (spawnrate == 0) {
+                        getGameWorld().spawn("speed_up", new SpawnData(box.getX(), box.getY()));
+                        break;
+                    }
+                    if (spawnrate == 1) {
+                        getGameWorld().spawn("power_up", new SpawnData(box.getX(), box.getY()));
+                        break;
+                    }
+                    if (spawnrate == 2) {
                             getGameWorld().spawn("bomb_up", new SpawnData(box.getX(), box.getY()));
+                            break;
                     }
                 }
             }
@@ -223,6 +230,8 @@ public class Game extends GameApplication {
                 ArrayList<Integer> coords = getTileCoordinates(player1.getX(), player1.getY());
                 player1.getComponent(Player.class).placeBomb(spawn(
                         "bomb", new SpawnData(coords.get(0), coords.get(1)).put("radius", player1.getComponent(Player.class).getPower())));
+
+                System.out.println("power - " +player1.getComponent(Player.class).getPower());
             }
         }, KeyCode.SPACE);
 
@@ -246,6 +255,10 @@ public class Game extends GameApplication {
             protected void onCollisionBegin(Entity player, Entity explosion) {
                 player.getComponent(Player.class).loseHealth();
                 System.out.println("health");
+
+                player1.getComponent(Player.class).adjustHeartsPlayerOne();
+                player2.getComponent(Player.class).adjustHeartsPlayerTwo();
+
                 if (player.getComponent(Player.class).getHealth() > 0) {
                     FXGL.play("player_hit.wav");
                 }
@@ -253,7 +266,11 @@ public class Game extends GameApplication {
                 if (player.getComponent(Player.class).getHealth() == 0) {
                     FXGL.play("player_dead.wav");
                     FXGL.showMessage("Player " + player.getComponent(Player.class).getPlayerNumber() + " died in " + Math.round(getGameTimer().getNow()) + " seconds!");
-                    FXGL.getGameTimer().runOnceAfter(() -> FXGL.getGameController().gotoMainMenu() ,Duration.seconds(5));
+
+                    FXGL.getGameTimer().runOnceAfter(() -> FXGL.getAudioPlayer().stopAllMusic() ,Duration.seconds(4.5));
+                    FXGL.getGameTimer().runOnceAfter(() -> {
+                        FXGL.getGameController().gotoMainMenu();
+                        } ,Duration.seconds(5));
                 }
             }
         });
@@ -282,6 +299,7 @@ public class Game extends GameApplication {
         FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.SPEED_UP) {
             @Override
             protected void onCollisionBegin(Entity player, Entity item) {
+                System.out.println("player " + player.getComponent(Player.class).getPlayerNumber());
                 player.getComponent(Player.class).speedUp();
                 item.removeFromWorld();
             }
@@ -302,6 +320,84 @@ public class Game extends GameApplication {
                 item.removeFromWorld();
             }
         });
+
+    }
+
+    @Override
+    protected void initUI() {
+        //Sorry dat jullie ogen deze code moeten zien
+
+        Image heart = new Image("/assets/textures/heart.png");
+
+        //Hartjes Speler 1
+        ImageView hearticon1_1 = new ImageView(heart);
+        ImageView hearticon1_2 = new ImageView(heart);
+        ImageView hearticon1_3 = new ImageView(heart);
+
+        Label heart1_1 = new Label();
+        Label heart1_2 = new Label();
+        Label heart1_3 = new Label();
+
+        heart1_1.setGraphic(hearticon1_1);
+        heart1_1.setTranslateY(10);
+        heart1_1.setTranslateX(83);
+
+        heart1_2.setGraphic(hearticon1_2);
+        heart1_2.setTranslateY(10);
+        heart1_2.setTranslateX(156);
+
+        heart1_3.setGraphic(hearticon1_3);
+        heart1_3.setTranslateY(10);
+        heart1_3.setTranslateX(229);
+
+        FXGL.getGameScene().addUINode(heart1_1);
+        FXGL.getGameScene().addUINode(heart1_2);
+        FXGL.getGameScene().addUINode(heart1_3);
+
+        //Hartjes speler 2
+        ImageView hearticon2_1 = new ImageView(heart);
+        ImageView hearticon2_2 = new ImageView(heart);
+        ImageView hearticon2_3 = new ImageView(heart);
+
+        Label heart2_1 = new Label();
+        Label heart2_2 = new Label();
+        Label heart2_3 = new Label();
+
+        heart2_1.setGraphic(hearticon2_1);
+        heart2_1.setTranslateY(10);
+        heart2_1.setTranslateX(805);
+
+        heart2_2.setGraphic(hearticon2_2);
+        heart2_2.setTranslateY(10);
+        heart2_2.setTranslateX(732);
+
+        heart2_3.setGraphic(hearticon2_3);
+        heart2_3.setTranslateY(10);
+        heart2_3.setTranslateX(659);
+
+        FXGL.getGameScene().addUINode(heart2_1);
+        FXGL.getGameScene().addUINode(heart2_2);
+        FXGL.getGameScene().addUINode(heart2_3);
+
+        //Player Closeup Graphics
+        Image player1 = new Image("/assets/textures/player1_closeup.png");
+        ImageView player1Icon = new ImageView(player1);
+
+        Label player1Graphic = new Label();
+        player1Graphic.setGraphic(player1Icon);
+        player1Graphic.setTranslateY(10);
+        player1Graphic.setTranslateX(10);
+
+        Image player2 = new Image("/assets/textures/player2_closeup.png");
+        ImageView player2Icon = new ImageView(player2);
+
+        Label player2Graphic = new Label();
+        player2Graphic.setGraphic(player2Icon);
+        player2Graphic.setTranslateY(10);
+        player2Graphic.setTranslateX(878);
+
+        FXGL.getGameScene().addUINode(player1Graphic);
+        FXGL.getGameScene().addUINode(player2Graphic);
 
     }
 

@@ -30,7 +30,7 @@ public class BombermanFactory implements EntityFactory {
     }
 
     @Spawns("player")
-    public Entity newPlayer1(SpawnData data) {
+    public Entity newPlayer(SpawnData data) {
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.DYNAMIC);
 
@@ -62,6 +62,7 @@ public class BombermanFactory implements EntityFactory {
                 .with(new PhysicsComponent())
                 .with(new CollidableComponent(true))
                 .type(EntityTypes.EXPLODABLE_BLOCK)
+                .zIndex(2)
                 .build();
     }
 
@@ -108,7 +109,6 @@ public class BombermanFactory implements EntityFactory {
                 .with(new CollidableComponent(true))
                 .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(62, 62)))
                 .scale(1, 1)
-
                 .build();
     }
 
@@ -120,6 +120,7 @@ public class BombermanFactory implements EntityFactory {
                 .type(EntityTypes.SPEED_UP)
                 .with(new CollidableComponent(true))
                 .scale(1, 1)
+                .zIndex(1)
                 .build();
     }
     @Spawns("bomb_up")
@@ -127,10 +128,11 @@ public class BombermanFactory implements EntityFactory {
         return FXGL.entityBuilder()
                 .from(data)
                 .viewWithBBox("extrabomb-1.png")
-                .type(EntityTypes.SPEED_UP)
+                .type(EntityTypes.BOMB_UP)
                 .with(new CollidableComponent(true))
                 .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(62, 62)))
                 .scale(1, 1)
+                .zIndex(1)
                 .build();
     }
     @Spawns("power_up")
@@ -138,10 +140,11 @@ public class BombermanFactory implements EntityFactory {
         return FXGL.entityBuilder()
                 .from(data)
                 .viewWithBBox("bomradius-1.png")
-                .type(EntityTypes.SPEED_UP)
+                .type(EntityTypes.POWER_UP)
                 .with(new CollidableComponent(true))
                 .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(62, 62)))
                 .scale(1, 1)
+                .zIndex(1)
                 .build();
     }
 

@@ -8,11 +8,14 @@ import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.almasb.fxgl.physics.box2d.dynamics.contacts.Position;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
 
 import java.awt.geom.Point2D;
 
+import static com.almasb.fxgl.dsl.FXGL.getGameScene;
 import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.image;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
@@ -28,6 +31,8 @@ public class Player extends Component {
     private int health = 3;
     private int playerNumber;
 
+    private int invisFrames = 0;
+
     private PhysicsComponent physics;
     private AnimatedTexture texture;
     private String direction = "down";
@@ -36,6 +41,7 @@ public class Player extends Component {
     private AnimationChannel newAnimation;
 
     Image image = image("player_1_move_down.png");
+    private ObservableList<Node> nodeList = getGameScene().getUINodes();
 
 
     public Player(int playerNumber) {
@@ -153,12 +159,19 @@ public class Player extends Component {
         }
     }
 
+
     public void loseHealth() {
-        health--;
+        if (invisFrames == 0) {
+            invisFrames = 1;
+            health--;
+            getGameTimer().runOnceAfter(() -> {
+                invisFrames = 0;
+            }, Duration.millis(500));
+        }
     }
 
     public void speedUp() {
-        speed += 50;
+        speed += 20;
     }
 
     public void powerUp() {
@@ -184,5 +197,28 @@ public class Player extends Component {
     public int getHealth() {
         System.out.println(health);
         return health;
+    }
+
+    public void adjustHeartsPlayerOne() {
+
+        if (this.health == 2) {
+            nodeList.get(2).setOpacity(0);
+        } else if (this.health == 1) {
+            nodeList.get(1).setOpacity(0);
+        } else if (this.health == 0) {
+            nodeList.get(0).setOpacity(0);
+        }
+
+    }
+
+    public void adjustHeartsPlayerTwo() {
+
+        if (this.health == 2) {
+            nodeList.get(5).setOpacity(0);
+        } else if (this.health == 1) {
+            nodeList.get(4).setOpacity(0);
+        } else if (this.health == 0) {
+            nodeList.get(3).setOpacity(0);
+        }
     }
 }
