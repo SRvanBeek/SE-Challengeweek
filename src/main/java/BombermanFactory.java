@@ -54,13 +54,13 @@ public class BombermanFactory implements EntityFactory {
     }
 
 
-    @Spawns("wall")
+    @Spawns("eBlock")
     public Entity newExplodableBlock(SpawnData data) {
         return FXGL.entityBuilder()
                 .from(data)
                 .viewWithBBox((String) data.get("viewbox"))
                 .with(new PhysicsComponent())
-                .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("Height"))))
+                .with(new CollidableComponent(true))
                 .scale(0.4D, 0.4D)
                 .type(EntityTypes.EXPLODABLE_BLOCK)
                 .build();

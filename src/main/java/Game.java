@@ -46,6 +46,8 @@ public class Game extends GameApplication {
 
         player1 = getGameWorld().spawn("player", new SpawnData(65, 65).put("playerNumber", 1));
         player2 = getGameWorld().spawn("player", new SpawnData(850, 700).put("playerNumber", 2));
+        Entity box = getGameWorld().spawn("eBlock", new SpawnData(64, 128).put("viewbox", "box-1.png"));
+
 
         FXGL.loopBGM("BGM.wav");
     }
@@ -229,7 +231,6 @@ public class Game extends GameApplication {
 
                 System.out.println(bomb.getType());
                 bomb.removeFromWorld();
-
             }
         });
     }
