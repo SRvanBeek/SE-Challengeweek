@@ -24,11 +24,12 @@ public class BombermanFactory implements EntityFactory {
         return FXGL.entityBuilder(data)
                 .type(EntityTypes.PLATFORM)
                 .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+                .with(new CollidableComponent(true))
                 .with(new PhysicsComponent())
                 .build();
     }
 
-    @Spawns("player1")
+    @Spawns("player")
     public Entity newPlayer1(SpawnData data) {
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.DYNAMIC);
@@ -49,20 +50,20 @@ public class BombermanFactory implements EntityFactory {
                 .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(31, 41)))
                 .with(new CollidableComponent(true))
                 .with(physics)
-                .with(new Player())
+                .with(new Player(data.get("playerNumber")))
                 .build();
     }
 
 
     @Spawns("wall")
-    public Entity newWall(SpawnData data) {
+    public Entity newExplodableBlock(SpawnData data) {
         return FXGL.entityBuilder()
                 .from(data)
-                .viewWithBBox("wall.png")
+                .viewWithBBox((String) data.get("viewbox"))
                 .with(new PhysicsComponent())
                 .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("Height"))))
                 .scale(0.4D, 0.4D)
-                .type(EntityTypes.PLAYER)
+                .type(EntityTypes.EXPLODABLE_BLOCK)
                 .build();
     }
 
@@ -93,10 +94,10 @@ public class BombermanFactory implements EntityFactory {
                 .from(data)
                 .view("bomb-1.png")
                 .with(physics)
+                .type(EntityTypes.BOMB_ACTIVE)
                 .with(new Bomb(data.get("radius")))
                 .with(new CollidableComponent(true))
                 .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(62, 62)))
-                .type(EntityTypes.BOMB_ACTIVE)
                 .build();
     }
 
@@ -104,10 +105,12 @@ public class BombermanFactory implements EntityFactory {
     public Entity newExplosion(SpawnData data) {
         return FXGL.entityBuilder()
                 .from(data)
+                .type(EntityTypes.EXPLOSION)
                 .with(new ExplosionComponent())
                 .with(new CollidableComponent(true))
+                .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(62, 62)))
                 .scale(1, 1)
-                .type(EntityTypes.EXPLOSION)
+
                 .build();
     }
 }

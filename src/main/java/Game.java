@@ -48,7 +48,8 @@ public class Game extends GameApplication {
         getGameWorld().addEntityFactory(new BombermanFactory());
         FXGL.setLevelFromMap("bomberman_level_5.tmx");
 
-        player1 = getGameWorld().spawn("player1");
+        player1 = getGameWorld().spawn("player", new SpawnData(60, 60).put("playerNumber", 1));
+        player2 = getGameWorld().spawn("player", new SpawnData(160, 60).put("playerNumber", 2));
 
         Viewport viewport = getGameScene().getViewport();
         viewport.bindToEntity(player1, getAppWidth() /2.0, getAppHeight() /2.0);
@@ -142,6 +143,7 @@ public class Game extends GameApplication {
     @Override
     protected void initPhysics() {
         FXGL.getPhysicsWorld().setGravity(0, 0);
+
         FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.ITEM) {
             @Override
             protected void onCollision(Entity player, Entity item) {
@@ -150,14 +152,14 @@ public class Game extends GameApplication {
             }
         });
 
-        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.BOMB) {
-
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.EXPLODABLE_BLOCK, EntityTypes.EXPLOSION) {
             @Override
-            protected void onCollisionBegin(Entity a, Entity b) {
-                System.out.println(getTileCoordinates(player1.getX(), player1.getY()));
-                System.out.println((player1.getX() + 15) + " - " + (player1.getY() + 21));
+            protected void onCollisionEnd(Entity block, Entity explosion) {
+                block.removeFromWorld();
             }
+        });
 
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.BOMB) {
             @Override
             protected void onCollisionEnd(Entity player, Entity bomb) {
                 System.out.println("collision end");

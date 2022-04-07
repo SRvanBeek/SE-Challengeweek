@@ -1,3 +1,4 @@
+import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
@@ -21,7 +22,6 @@ public class Bomb extends Component {
                 spawn("explosion", bomb.getX(), bomb.getY());
                 for (int i = 1; i <= radius; i++) {
                     spawn("explosion", bomb.getX() + 64 * i, bomb.getY());
-
                 }
                 for (int i = 1; i <= radius; i++) {
                     spawn("explosion", bomb.getX() - 64 * i, bomb.getY());
@@ -39,6 +39,9 @@ public class Bomb extends Component {
             }
         }, Duration.seconds(4));
     }
+
+
+
 
     public PhysicsComponent getPhysics() {
         return physics;

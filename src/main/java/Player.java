@@ -38,7 +38,9 @@ public class Player extends Component {
     Image image = image("player_1_move_down.png");
 
 
-    public Player() {
+    public Player(int playerNumber) {
+        this.playerNumber = playerNumber;
+
         this.initialAnimation = new AnimationChannel(
                 image,
                 4,
@@ -74,7 +76,7 @@ public class Player extends Component {
     }
 
     public String getAnimationOnMovement() {
-        String animationName = "player_1_";
+        String animationName = "player_" + playerNumber + "_";
         animationName += physics.isMovingX() || physics.isMovingY() ? "move_" : "idle_";
         animationName += direction + ".png";
         return animationName;
@@ -133,7 +135,6 @@ public class Player extends Component {
             System.out.println("bomb placed");
 
             bomb.getComponent(Bomb.class).explode(bomb);
-            bomb.getComponent(Bomb.class).getPhysics().setVelocityX(200);
 
             System.out.println(bombsPlaced);
             getGameTimer().runOnceAfter(() -> {
