@@ -40,7 +40,6 @@ public class Bomb extends Component {
                 }
 
                 FXGL.play("explode.wav");
-                System.out.println("Explode sound");
                 bomb.removeFromWorld();
             }
         }, Duration.seconds(4));

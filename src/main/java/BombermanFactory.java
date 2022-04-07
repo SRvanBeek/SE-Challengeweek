@@ -16,8 +16,10 @@ import javafx.geometry.Point2D;
 import java.awt.*;
 
 public class BombermanFactory implements EntityFactory {
+
     public BombermanFactory() {
     }
+
 
     @Spawns("platform")
     public Entity newPlatform(SpawnData data) {
@@ -29,11 +31,11 @@ public class BombermanFactory implements EntityFactory {
                 .build();
     }
 
+
     @Spawns("player")
     public Entity newPlayer(SpawnData data) {
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.DYNAMIC);
-
         physics.addGroundSensor(
                 new HitBox(
                         "GROUND_SENSOR",
@@ -66,6 +68,7 @@ public class BombermanFactory implements EntityFactory {
                 .build();
     }
 
+
     @Spawns("bomb")
     public Entity newBomb(SpawnData data) {
         return FXGL.entityBuilder()
@@ -79,14 +82,13 @@ public class BombermanFactory implements EntityFactory {
                 .build();
     }
 
+
     @Spawns("bomb_active")
     public Entity newBombActive(SpawnData data) {
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.DYNAMIC);
-
         FixtureDef fd = new FixtureDef();
         fd.friction(0.0f);
-
         physics.setFixtureDef(fd);
 
         return FXGL.entityBuilder()
@@ -99,6 +101,7 @@ public class BombermanFactory implements EntityFactory {
                 .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(62, 62)))
                 .build();
     }
+
 
     @Spawns("explosion")
     public Entity newExplosion(SpawnData data) {
@@ -147,7 +150,6 @@ public class BombermanFactory implements EntityFactory {
                 .zIndex(1)
                 .build();
     }
-
 }
 
 

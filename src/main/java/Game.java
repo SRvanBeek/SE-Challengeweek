@@ -44,6 +44,7 @@ public class Game extends GameApplication {
         gameSettings.setTitle("Bomberman");
     }
 
+
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new BombermanFactory());
@@ -77,36 +78,30 @@ public class Game extends GameApplication {
                 Entity box = getGameWorld().spawn("eBlock", new SpawnData(128 * i + 64, 128 * j).put("viewbox", "box-1.png"));
             }
         }
-
         for (int i = 0; i < 2; i++) {
             for (int j = 1; j < 8; j++) {
                 Entity box = getGameWorld().spawn("eBlock", new SpawnData((64 * 12) * i + 64, 64 * j + 128).put("viewbox", "box-1.png"));
             }
         }
-
         for (int i = 1; i < 10; i++) {
             for (int j = 0; j < 2; j++) {
                 Entity box = getGameWorld().spawn("eBlock", new SpawnData(64 * i + 128, (64 * 10) * j + 64).put("viewbox", "box-1.png"));
             }
         }
-
-
         FXGL.loopBGM("BGM.wav");
     }
 
+
     public ArrayList getTileCoordinates(double playerX, double playerY) {
         ArrayList<Integer> coords = new ArrayList<>();
-        System.out.println(playerX + " - " + playerY);
-
         coords.add((int) Math.floor((playerX + 14) / 64) * 64);
         coords.add((int) Math.round((playerY) / 64) * 64);
-
         return coords;
     }
 
+
     @Override
     protected void initInput() {
-        //move up
         getInput().addAction(new UserAction("up") {
             @Override
             protected void onAction() {
@@ -121,7 +116,6 @@ public class Game extends GameApplication {
             }
         }, KeyCode.W, VirtualButton.UP);
 
-        // for p2
         getInput().addAction(new UserAction("up2") {
             @Override
             protected void onAction() {
@@ -136,7 +130,6 @@ public class Game extends GameApplication {
             }
         }, KeyCode.UP, VirtualButton.UP);
 
-        //move down
         getInput().addAction(new UserAction("down") {
             @Override
             protected void onAction() {
@@ -165,7 +158,6 @@ public class Game extends GameApplication {
             }
         }, KeyCode.DOWN, VirtualButton.DOWN);
 
-        //move left
         getInput().addAction(new UserAction("left") {
             @Override
             protected void onAction() {
@@ -194,7 +186,6 @@ public class Game extends GameApplication {
             }
         }, KeyCode.LEFT, VirtualButton.LEFT);
 
-        //move right
         getInput().addAction(new UserAction("right") {
             @Override
             protected void onAction() {
@@ -223,15 +214,12 @@ public class Game extends GameApplication {
             }
         }, KeyCode.RIGHT, VirtualButton.RIGHT);
 
-        //place bomb
         getInput().addAction(new UserAction("Place Bomb") {
             @Override
             protected void onActionBegin() {
                 ArrayList<Integer> coords = getTileCoordinates(player1.getX(), player1.getY());
                 player1.getComponent(Player.class).placeBomb(spawn(
                         "bomb", new SpawnData(coords.get(0), coords.get(1)).put("radius", player1.getComponent(Player.class).getPower())));
-
-                System.out.println("power - " +player1.getComponent(Player.class).getPower());
             }
         }, KeyCode.SPACE);
 
@@ -249,7 +237,6 @@ public class Game extends GameApplication {
     @Override
     protected void initPhysics() {
         FXGL.getPhysicsWorld().setGravity(0, 0);
-
         FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.EXPLOSION) {
             @Override
             protected void onCollisionBegin(Entity player, Entity explosion) {
@@ -262,7 +249,6 @@ public class Game extends GameApplication {
                 if (player.getComponent(Player.class).getHealth() > 0) {
                     FXGL.play("player_hit.wav");
                 }
-
                 if (player.getComponent(Player.class).getHealth() == 0) {
                     FXGL.play("player_dead.wav");
                     FXGL.showMessage("Player " + player.getComponent(Player.class).getPlayerNumber() + " died in " + Math.round(getGameTimer().getNow()) + " seconds!");
@@ -275,6 +261,7 @@ public class Game extends GameApplication {
             }
         });
 
+
         FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.EXPLODABLE_BLOCK, EntityTypes.EXPLOSION) {
             @Override
             protected void onCollisionBegin(Entity block, Entity explosion) {
@@ -282,15 +269,13 @@ public class Game extends GameApplication {
             }
         });
 
+
         FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.BOMB) {
             @Override
             protected void onCollisionEnd(Entity player, Entity bomb) {
-                System.out.println("collision end");
                 ArrayList<Integer> coords = getTileCoordinates(bomb.getX(), bomb.getY());
                 player1.getComponent(Player.class).placeBomb(spawn(
                         "bomb_active", new SpawnData(coords.get(0) + 1, coords.get(1) + 1).put("radius", player.getComponent(Player.class).getPower())));
-
-                System.out.println(bomb.getType());
                 bomb.removeFromWorld();
             }
         });
