@@ -46,7 +46,7 @@ public class Game extends GameApplication {
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new BombermanFactory());
-        FXGL.setLevelFromMap("bomberman_level_5.tmx");
+        FXGL.setLevelFromMap("bomberman_level_1.tmx");
 
         player1 = getGameWorld().spawn("player1");
 
