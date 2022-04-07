@@ -26,17 +26,6 @@ public class Factory implements EntityFactory {
     }
 
 
-    @Spawns("box")
-    public Entity newBox(SpawnData data) {
-        return FXGL.entityBuilder(data)
-                .type(EntityTypes.BOX)
-                .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
-                .with(new PhysicsComponent())
-                .collidable()
-                .build();
-    }
-
-
     @Spawns("player")
     public Entity newPlayer(SpawnData data) {
         PhysicsComponent physics = new PhysicsComponent();
@@ -55,7 +44,7 @@ public class Factory implements EntityFactory {
         return FXGL.entityBuilder(data)
                 .at(60, 60)
                 .type(EntityTypes.PLAYER)
-                .bbox(new HitBox(new Point2D(0, 0), BoundingShape.circle(36)))
+                .bbox(new HitBox(new Point2D(0, 0), BoundingShape.circle(20)))
                 .collidable()
                 .with(physics)
                 .with(new Player())

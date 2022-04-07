@@ -1,5 +1,5 @@
 public enum EntityTypes {
     PLAYER,
     PLATFORM,
-    BOX
+    DESTRUCTABLE_BOX
 }

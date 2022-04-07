@@ -3,32 +3,42 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
 import com.almasb.fxgl.physics.CollisionHandler;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class Game extends GameApplication {
 
     private Entity player;
-    private Entity test;
 
 
     @Override
     protected void initSettings(GameSettings gameSettings) {
         gameSettings.setWidth(15 * 70);
         gameSettings.setHeight(10 * 70);
+        gameSettings.setDeveloperMenuEnabled(true);
     }
 
 
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new Factory());
-        FXGL.setLevelFromMap("map1.tmx");
+        FXGL.setLevelFromMap("level1.tmx");
 
         player = getGameWorld().spawn("player");
+
+        FXGL.entityBuilder()
+                .at(200, 200)
+                .viewWithBBox(new Rectangle(10, 10, Color.RED))
+                .type(EntityTypes.DESTRUCTABLE_BOX)
+                .with(new CollidableComponent(true))
+                .buildAndAttach();
 
 
         Viewport viewport = getGameScene().getViewport();
@@ -92,10 +102,10 @@ public class Game extends GameApplication {
     @Override
     protected void initPhysics() {
         FXGL.getPhysicsWorld().setGravity(0, 0);
-        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.BOX) {
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.DESTRUCTABLE_BOX) {
             @Override
-            protected void onCollision(Entity player, Entity box) {
-                box.removeFromWorld();
+            protected void onCollision(Entity player, Entity dbox) {
+                dbox.removeFromWorld();
                 System.out.println("removed from world");
             }
         });
