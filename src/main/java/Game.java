@@ -38,12 +38,13 @@ public class Game extends GameApplication {
     protected void initSettings(GameSettings gameSettings) {
         gameSettings.setWidth(15 * 70);
         gameSettings.setHeight(10 * 70);
+        gameSettings.setDeveloperMenuEnabled(true);
     }
 
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new BombermanFactory());
-        FXGL.setLevelFromMap("test.tmx");
+        FXGL.setLevelFromMap("bomberman_level_1.tmx");
 
         player1 = getGameWorld().spawn("player1");
 

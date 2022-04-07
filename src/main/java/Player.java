@@ -20,7 +20,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 public class Player extends Component {
     private String name;
 
-    private int speed = 200;
+    private int speed = 400;
     private int bombCount = 4;
     private int bombsPlaced = 0;
     private int power = 1;
