@@ -16,8 +16,10 @@ import javafx.geometry.Point2D;
 import java.awt.*;
 
 public class BombermanFactory implements EntityFactory {
+
     public BombermanFactory() {
     }
+
 
     @Spawns("platform")
     public Entity newPlatform(SpawnData data) {
@@ -29,11 +31,11 @@ public class BombermanFactory implements EntityFactory {
                 .build();
     }
 
+
     @Spawns("player")
     public Entity newPlayer1(SpawnData data) {
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.DYNAMIC);
-
         physics.addGroundSensor(
                 new HitBox(
                         "GROUND_SENSOR",
@@ -43,7 +45,6 @@ public class BombermanFactory implements EntityFactory {
         );
 
         physics.setFixtureDef(new FixtureDef().friction(0.0f));
-
         return FXGL.entityBuilder(data)
                 .type(EntityTypes.PLAYER)
                 .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(31, 41)))
@@ -65,6 +66,7 @@ public class BombermanFactory implements EntityFactory {
                 .build();
     }
 
+
     @Spawns("bomb")
     public Entity newBomb(SpawnData data) {
         return FXGL.entityBuilder()
@@ -78,14 +80,13 @@ public class BombermanFactory implements EntityFactory {
                 .build();
     }
 
+
     @Spawns("bomb_active")
     public Entity newBombActive(SpawnData data) {
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.DYNAMIC);
-
         FixtureDef fd = new FixtureDef();
         fd.friction(0.0f);
-
         physics.setFixtureDef(fd);
 
         return FXGL.entityBuilder()
@@ -99,6 +100,7 @@ public class BombermanFactory implements EntityFactory {
                 .build();
     }
 
+
     @Spawns("explosion")
     public Entity newExplosion(SpawnData data) {
         return FXGL.entityBuilder()
@@ -108,7 +110,6 @@ public class BombermanFactory implements EntityFactory {
                 .with(new CollidableComponent(true))
                 .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(62, 62)))
                 .scale(1, 1)
-
                 .build();
     }
 }
