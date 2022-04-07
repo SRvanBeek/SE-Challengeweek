@@ -3,15 +3,29 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
+import com.almasb.fxgl.physics.CollisionHandler;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import java.util.ArrayList;
+import java.util.Objects;
 
+import static com.almasb.fxgl.dsl.FXGL.getInput;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
-public class Game extends GameApplication {
 
-    private Entity player;
+public class Game extends GameApplication {
+    private Entity player1;
+    private Entity player2;
+    private ArrayList<Entity> walls = new ArrayList<>();
+    private int width = 960;
+    private int height = 832;
+    private final BombermanFactory bombermanFactory = new BombermanFactory();
+
+
 
     @Override
     protected void initSettings(GameSettings gameSettings) {
@@ -21,69 +35,100 @@ public class Game extends GameApplication {
 
     @Override
     protected void initGame() {
-        getGameWorld().addEntityFactory(new Factory());
-        FXGL.setLevelFromMap("mario.tmx");
+        getGameWorld().addEntityFactory(new BombermanFactory());
+        FXGL.setLevelFromMap("test.tmx");
 
-        player = getGameWorld().spawn("player");
+        player1 = getGameWorld().spawn("player1");
 
         Viewport viewport = getGameScene().getViewport();
-        viewport.bindToEntity(player, getAppWidth() /2.0, getAppHeight() /2.0);
+        viewport.bindToEntity(player1, getAppWidth() /2.0, getAppHeight() /2.0);
         viewport.setLazy(true);
     }
 
     @Override
     protected void initInput() {
-
-        // Leest input voor naar rechts
-        getInput().addAction(new UserAction("Right") {
+        //move up
+        getInput().addAction(new UserAction("up") {
             @Override
             protected void onAction() {
                 super.onAction();
-                player.getComponent(Player.class).right();
+                player1.getComponent(Player.class).up();
             }
-        }, KeyCode.D, VirtualButton.RIGHT);
 
+            @Override
+            protected void onActionEnd() {
+                super.onActionEnd();
+                player1.getComponent(Player.class).stopYMovement();
+            }
+        }, KeyCode.W, VirtualButton.UP);
 
-//         Leest input voor naar beneden (einde)        TO DO: D kan niet 2 keer assigned worden (voor elke input)
-//        getInput().addAction(new UserAction("RightEnd") {
-//            @Override
-//            protected void onActionEnd() {
-//                super.onActionEnd();
-//                player.getComponent(Player.class).rightEnd();
-//            }
-//        }, KeyCode.D, VirtualButton.RIGHT);
-
-
-        // Leest input voor naar links
-        getInput().addAction(new UserAction("Left") {
+        //move down
+        getInput().addAction(new UserAction("down") {
             @Override
             protected void onAction() {
                 super.onAction();
-                player.getComponent(Player.class).left();
+                player1.getComponent(Player.class).down();
+            }
+
+            @Override
+            protected void onActionEnd() {
+                super.onActionEnd();
+                player1.getComponent(Player.class).stopYMovement();
+            }
+        }, KeyCode.S, VirtualButton.DOWN);
+
+        //move left
+        getInput().addAction(new UserAction("left") {
+            @Override
+            protected void onAction() {
+                super.onAction();
+                player1.getComponent(Player.class).left();
+            }
+
+            @Override
+            protected void onActionEnd() {
+                super.onActionEnd();
+                player1.getComponent(Player.class).stopXMovement();
             }
         }, KeyCode.A, VirtualButton.LEFT);
 
-
-        // Leest input voor naar boven
-        getInput().addAction(new UserAction("Up") {
+        //move right
+        getInput().addAction(new UserAction("right") {
             @Override
             protected void onAction() {
                 super.onAction();
-                player.getComponent(Player.class).up();
+                player1.getComponent(Player.class).right();
             }
-        }, KeyCode.W, VirtualButton.LEFT);
 
-
-        // Leest input voor naar beneden
-        getInput().addAction(new UserAction("Down") {
             @Override
-            protected void onAction() {
-                super.onAction();
-                player.getComponent(Player.class).down();
+            protected void onActionEnd() {
+                super.onActionEnd();
+                player1.getComponent(Player.class).stopXMovement();
             }
-        }, KeyCode.S, VirtualButton.LEFT);
+        }, KeyCode.D, VirtualButton.RIGHT);
+
+        //place bomb
+        getInput().addAction(new UserAction("Place Bomb") {
+            @Override
+            protected void onActionBegin() {
+                player1.getComponent(Player.class).placeBomb();
+            }
+        }, KeyCode.F);
     }
 
+
+
+    @Override
+    protected void initPhysics() {
+        FXGL.getPhysicsWorld().setGravity(0, 0);
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.ITEM) {
+            @Override
+            protected void onCollision(Entity player, Entity item) {
+                player1.getComponent(Player.class).setSpeed(player1.getComponent(Player.class).getSpeed() + 1);
+                item.removeFromWorld();
+            }
+        });
+    }
 
 
     public static void main(String[] args) {

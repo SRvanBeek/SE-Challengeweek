@@ -1,4 +1,3 @@
 public enum EntityTypes {
-    PLAYER,
-    PLATFORM
+    PLAYER, FIXEDBLOCK, ITEM, PLATFORM, EXPLODABLE_BLOCK, BOMB
 }
