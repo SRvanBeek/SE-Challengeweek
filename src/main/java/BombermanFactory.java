@@ -45,7 +45,6 @@ public class BombermanFactory implements EntityFactory {
         physics.setFixtureDef(new FixtureDef().friction(0.0f));
 
         return FXGL.entityBuilder(data)
-                .at(60, 60)
                 .type(EntityTypes.PLAYER)
                 .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(31, 41)))
                 .with(new CollidableComponent(true))

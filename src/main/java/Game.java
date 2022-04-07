@@ -42,10 +42,10 @@ public class Game extends GameApplication {
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new BombermanFactory());
-        FXGL.setLevelFromMap("bomberman_level_1.tmx");
+        FXGL.setLevelFromMap("bomberman_level_3.tmx");
 
-        player1 = getGameWorld().spawn("player", new SpawnData(60, 60).put("playerNumber", 1));
-        player2 = getGameWorld().spawn("player", new SpawnData(160, 60).put("playerNumber", 2));
+        player1 = getGameWorld().spawn("player", new SpawnData(65, 65).put("playerNumber", 1));
+        player2 = getGameWorld().spawn("player", new SpawnData(850, 700).put("playerNumber", 2));
 
         FXGL.loopBGM("BGM.wav");
     }
@@ -77,6 +77,21 @@ public class Game extends GameApplication {
             }
         }, KeyCode.W, VirtualButton.UP);
 
+        // for p2
+        getInput().addAction(new UserAction("up2") {
+            @Override
+            protected void onAction() {
+                super.onAction();
+                player2.getComponent(Player.class).up();
+            }
+
+            @Override
+            protected void onActionEnd() {
+                super.onActionEnd();
+                player2.getComponent(Player.class).stopYMovement();
+            }
+        }, KeyCode.UP, VirtualButton.UP);
+
         //move down
         getInput().addAction(new UserAction("down") {
             @Override
@@ -91,6 +106,20 @@ public class Game extends GameApplication {
                 player1.getComponent(Player.class).stopYMovement();
             }
         }, KeyCode.S, VirtualButton.DOWN);
+
+        getInput().addAction(new UserAction("down2") {
+            @Override
+            protected void onAction() {
+                super.onAction();
+                player2.getComponent(Player.class).down();
+            }
+
+            @Override
+            protected void onActionEnd() {
+                super.onActionEnd();
+                player2.getComponent(Player.class).stopYMovement();
+            }
+        }, KeyCode.DOWN, VirtualButton.DOWN);
 
         //move left
         getInput().addAction(new UserAction("left") {
@@ -107,6 +136,20 @@ public class Game extends GameApplication {
             }
         }, KeyCode.A, VirtualButton.LEFT);
 
+        getInput().addAction(new UserAction("left2") {
+            @Override
+            protected void onAction() {
+                super.onAction();
+                player2.getComponent(Player.class).left();
+            }
+
+            @Override
+            protected void onActionEnd() {
+                super.onActionEnd();
+                player2.getComponent(Player.class).stopXMovement();
+            }
+        }, KeyCode.LEFT, VirtualButton.LEFT);
+
         //move right
         getInput().addAction(new UserAction("right") {
             @Override
@@ -122,6 +165,20 @@ public class Game extends GameApplication {
             }
         }, KeyCode.D, VirtualButton.RIGHT);
 
+        getInput().addAction(new UserAction("right2") {
+            @Override
+            protected void onAction() {
+                super.onAction();
+                player2.getComponent(Player.class).right();
+            }
+
+            @Override
+            protected void onActionEnd() {
+                super.onActionEnd();
+                player2.getComponent(Player.class).stopXMovement();
+            }
+        }, KeyCode.RIGHT, VirtualButton.RIGHT);
+
         //place bomb
         getInput().addAction(new UserAction("Place Bomb") {
             @Override
@@ -130,7 +187,16 @@ public class Game extends GameApplication {
                 player1.getComponent(Player.class).placeBomb(spawn(
                         "bomb", new SpawnData(coords.get(0), coords.get(1)).put("radius", player1.getComponent(Player.class).getPower())));
             }
-        }, KeyCode.F);
+        }, KeyCode.SPACE);
+
+        getInput().addAction(new UserAction("Place Bomb2") {
+            @Override
+            protected void onActionBegin() {
+                ArrayList<Integer> coords = getTileCoordinates(player2.getX(), player2.getY());
+                player2.getComponent(Player.class).placeBomb(spawn(
+                        "bomb", new SpawnData(coords.get(0), coords.get(1)).put("radius", player2.getComponent(Player.class).getPower())));
+            }
+        }, KeyCode.ENTER);
     }
 
 
