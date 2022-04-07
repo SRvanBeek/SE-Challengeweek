@@ -73,8 +73,8 @@ public class Player extends Component {
     }
 
     public String getAnimationOnMovement() {
-        String animationName = "player_1" + "_move_";
-        //animationName += physics.isMovingX() || physics.isMovingY() ? "move_" : "idle_";
+        String animationName = "player_1_";
+        animationName += physics.isMovingX() || physics.isMovingY() ? "move_" : "idle_";
         animationName += direction + ".png";
         return animationName;
     }
@@ -90,12 +90,12 @@ public class Player extends Component {
 
     //movement functions
     public void left() {
-        direction = "down";
+        direction = "left";
         physics.setVelocityX(-speed);
     }
 
     public void right() {
-        direction = "down";
+        direction = "right";
         physics.setVelocityX(speed);
     }
 
