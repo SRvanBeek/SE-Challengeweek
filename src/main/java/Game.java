@@ -39,6 +39,8 @@ public class Game extends GameApplication {
         gameSettings.setWidth(15 * 70);
         gameSettings.setHeight(10 * 70);
         gameSettings.setDeveloperMenuEnabled(true);
+        gameSettings.setMainMenuEnabled(true);
+        gameSettings.setTitle("Bomberman");
     }
 
     @Override
