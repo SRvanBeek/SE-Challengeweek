@@ -51,6 +51,8 @@ public class Game extends GameApplication {
         Viewport viewport = getGameScene().getViewport();
         viewport.bindToEntity(player1, getAppWidth() /2.0, getAppHeight() /2.0);
         viewport.setLazy(true);
+
+        FXGL.loopBGM("BGM.wav");
     }
 
     public ArrayList getTileCoordinates(double playerX, double playerY) {
