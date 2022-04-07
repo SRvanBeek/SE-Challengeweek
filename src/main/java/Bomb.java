@@ -19,6 +19,20 @@ public class Bomb extends Component {
         getGameTimer().runOnceAfter(() -> {
             if (bomb.getType() == EntityTypes.BOMB_ACTIVE) {
                 spawn("explosion", bomb.getX(), bomb.getY());
+                for (int i = 1; i <= radius; i++) {
+                    spawn("explosion", bomb.getX() + 64 * i, bomb.getY());
+
+                }
+                for (int i = 1; i <= radius; i++) {
+                    spawn("explosion", bomb.getX() - 64 * i, bomb.getY());
+                }
+                for (int i = 1; i <= radius; i++) {
+                    spawn("explosion", bomb.getX(), bomb.getY() + 64 * i);
+                }
+                for (int i = 1; i <= radius; i++) {
+                    spawn("explosion", bomb.getX(), bomb.getY() - 64 * i);
+                }
+
                 FXGL.play("explode.wav");
                 System.out.println("Explode sound");
                 bomb.removeFromWorld();
