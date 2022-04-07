@@ -61,7 +61,6 @@ public class BombermanFactory implements EntityFactory {
                 .viewWithBBox((String) data.get("viewbox"))
                 .with(new PhysicsComponent())
                 .with(new CollidableComponent(true))
-                .scale(0.4D, 0.4D)
                 .type(EntityTypes.EXPLODABLE_BLOCK)
                 .build();
     }

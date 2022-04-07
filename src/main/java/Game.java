@@ -46,7 +46,30 @@ public class Game extends GameApplication {
 
         player1 = getGameWorld().spawn("player", new SpawnData(65, 65).put("playerNumber", 1));
         player2 = getGameWorld().spawn("player", new SpawnData(850, 700).put("playerNumber", 2));
-        Entity box = getGameWorld().spawn("eBlock", new SpawnData(64, 128).put("viewbox", "box-1.png"));
+
+        for (int i = 1; i < 12; i++) {
+            for (int j = 1; j < 5; j++) {
+                Entity box = getGameWorld().spawn("eBlock", new SpawnData(64 * i + 64, 128 * j + 64).put("viewbox", "box-1.png"));
+            }
+        }
+        for (int i = 1; i < 6; i++) {
+            for (int j = 1; j < 6; j++) {
+                Entity box = getGameWorld().spawn("eBlock", new SpawnData(128 * i + 64, 128 * j).put("viewbox", "box-1.png"));
+            }
+        }
+
+        for (int i = 0; i < 2; i++) {
+            for (int j = 1; j < 8; j++) {
+                Entity box = getGameWorld().spawn("eBlock", new SpawnData((64 * 12) * i + 64, 64 * j + 128).put("viewbox", "box-1.png"));
+            }
+        }
+
+        for (int i = 1; i < 10; i++) {
+            for (int j = 0; j < 2; j++) {
+                Entity box = getGameWorld().spawn("eBlock", new SpawnData(64 * i + 128, (64 * 10) * j + 64).put("viewbox", "box-1.png"));
+            }
+        }
+
 
 
         FXGL.loopBGM("BGM.wav");
