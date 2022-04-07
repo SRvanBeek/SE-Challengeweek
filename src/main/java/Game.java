@@ -44,13 +44,23 @@ public class Game extends GameApplication {
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new BombermanFactory());
-        FXGL.setLevelFromMap("bomberman_level_1.tmx");
+        FXGL.setLevelFromMap("level1.tmx");
 
         player1 = getGameWorld().spawn("player1");
 
         Viewport viewport = getGameScene().getViewport();
         viewport.bindToEntity(player1, getAppWidth() /2.0, getAppHeight() /2.0);
         viewport.setLazy(true);
+    }
+
+    public ArrayList getTileCoordinates(double playerX, double playerY) {
+        ArrayList<Integer> coords = new ArrayList<>();
+        System.out.println(playerX + " - " + playerY);
+
+        coords.add((int) Math.floor((playerX + 14) / 64) * 64);
+        coords.add((int) Math.round((playerY) / 64) * 64);
+
+        return coords;
     }
 
     @Override
@@ -119,12 +129,12 @@ public class Game extends GameApplication {
         getInput().addAction(new UserAction("Place Bomb") {
             @Override
             protected void onActionBegin() {
+                ArrayList<Integer> coords = getTileCoordinates(player1.getX(), player1.getY());
                 player1.getComponent(Player.class).placeBomb(spawn(
-                        "bomb", new SpawnData(player1.getX(), player1.getY()).put("radius", player1.getComponent(Player.class).getPower())));
+                        "bomb", new SpawnData(coords.get(0), coords.get(1)).put("radius", player1.getComponent(Player.class).getPower())));
             }
         }, KeyCode.F);
     }
-
 
 
     @Override
@@ -139,12 +149,19 @@ public class Game extends GameApplication {
         });
 
         FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.BOMB) {
+
+            @Override
+            protected void onCollisionBegin(Entity a, Entity b) {
+                System.out.println(getTileCoordinates(player1.getX(), player1.getY()));
+                System.out.println((player1.getX() + 15) + " - " + (player1.getY() + 21));
+            }
+
             @Override
             protected void onCollisionEnd(Entity player, Entity bomb) {
-
                 System.out.println("collision end");
+                ArrayList<Integer> coords = getTileCoordinates(bomb.getX(), bomb.getY());
                 player1.getComponent(Player.class).placeBomb(spawn(
-                        "bomb_active", new SpawnData(bomb.getX(), bomb.getY()).put("radius", player.getComponent(Player.class).getPower())));
+                        "bomb_active", new SpawnData(coords.get(0), coords.get(1)).put("radius", player.getComponent(Player.class).getPower())));
 
                 System.out.println(bomb.getType());
                 bomb.removeFromWorld();

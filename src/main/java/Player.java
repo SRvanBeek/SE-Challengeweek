@@ -4,6 +4,7 @@ import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.pathfinding.CellMoveComponent;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import com.almasb.fxgl.physics.PhysicsComponent;
+import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.almasb.fxgl.physics.box2d.dynamics.contacts.Position;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
@@ -130,7 +131,9 @@ public class Player extends Component {
         if (bomb.getType() == EntityTypes.BOMB_ACTIVE) {
             bombsPlaced++;
             System.out.println("bomb placed");
+
             bomb.getComponent(Bomb.class).explode(bomb);
+            bomb.getComponent(Bomb.class).getPhysics().setVelocityX(200);
 
             System.out.println(bombsPlaced);
             getGameTimer().runOnceAfter(() -> {
