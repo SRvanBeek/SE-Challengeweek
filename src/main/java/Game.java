@@ -52,6 +52,17 @@ public class Game extends GameApplication {
         for (int i = 1; i < 12; i++) {
             for (int j = 1; j < 5; j++) {
                 Entity box = getGameWorld().spawn("eBlock", new SpawnData(64 * i + 64, 128 * j + 64).put("viewbox", "box-1.png"));
+                int spawnrate = (int) (Math.random() * 7);
+                if (spawnrate < 3) {
+                    switch (spawnrate) {
+                        case 0:
+                            getGameWorld().spawn("speed_up", new SpawnData(box.getX(), box.getY()));
+                        case 1:
+                            getGameWorld().spawn("power_up", new SpawnData(box.getX(), box.getY()));
+                        case 2:
+                            getGameWorld().spawn("bomb_up", new SpawnData(box.getX(), box.getY()));
+                    }
+                }
             }
         }
         for (int i = 1; i < 6; i++) {
@@ -249,7 +260,7 @@ public class Game extends GameApplication {
 
         FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.EXPLODABLE_BLOCK, EntityTypes.EXPLOSION) {
             @Override
-            protected void onCollisionEnd(Entity block, Entity explosion) {
+            protected void onCollisionBegin(Entity block, Entity explosion) {
                 block.removeFromWorld();
             }
         });
@@ -266,6 +277,32 @@ public class Game extends GameApplication {
                 bomb.removeFromWorld();
             }
         });
+
+        //power-ups
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.SPEED_UP) {
+            @Override
+            protected void onCollisionBegin(Entity player, Entity item) {
+                player.getComponent(Player.class).speedUp();
+                item.removeFromWorld();
+            }
+        });
+
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.POWER_UP) {
+            @Override
+            protected void onCollisionBegin(Entity player, Entity item) {
+                player.getComponent(Player.class).powerUp();
+                item.removeFromWorld();
+            }
+        });
+
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.BOMB_UP) {
+            @Override
+            protected void onCollisionBegin(Entity player, Entity item) {
+                player.getComponent(Player.class).bombCountUp();
+                item.removeFromWorld();
+            }
+        });
+
     }
 
 

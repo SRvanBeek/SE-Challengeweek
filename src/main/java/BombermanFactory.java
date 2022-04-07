@@ -111,6 +111,40 @@ public class BombermanFactory implements EntityFactory {
 
                 .build();
     }
+
+    @Spawns("speed_up")
+    public Entity newSpeedUp(SpawnData data) {
+        return FXGL.entityBuilder()
+                .from(data)
+                .viewWithBBox("speedup-1.png")
+                .type(EntityTypes.SPEED_UP)
+                .with(new CollidableComponent(true))
+                .scale(1, 1)
+                .build();
+    }
+    @Spawns("bomb_up")
+    public Entity newBombUp(SpawnData data) {
+        return FXGL.entityBuilder()
+                .from(data)
+                .viewWithBBox("extrabomb-1.png")
+                .type(EntityTypes.SPEED_UP)
+                .with(new CollidableComponent(true))
+                .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(62, 62)))
+                .scale(1, 1)
+                .build();
+    }
+    @Spawns("power_up")
+    public Entity newPowerUp(SpawnData data) {
+        return FXGL.entityBuilder()
+                .from(data)
+                .viewWithBBox("bomradius-1.png")
+                .type(EntityTypes.SPEED_UP)
+                .with(new CollidableComponent(true))
+                .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(62, 62)))
+                .scale(1, 1)
+                .build();
+    }
+
 }
 
 

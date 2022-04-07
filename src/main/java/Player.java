@@ -21,10 +21,10 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 public class Player extends Component {
     private String name;
 
-    private int speed = 200;
-    private int bombCount = 400;
+    private int speed = 100;
+    private int bombCount = 1;
     private int bombsPlaced = 0;
-    private int power = 5;
+    private int power = 1;
     private int health = 3;
     private int playerNumber;
 
@@ -89,6 +89,15 @@ public class Player extends Component {
             image = chosenAnimationImage;
             texture.setImage(image);
         }
+        if (health <= 0) {
+            stopXMovement();
+            stopYMovement();
+            Image deadImage = image("player_" + playerNumber + "_dead.png");
+            if (deadImage != texture.getImage()) {
+                image = deadImage;
+                texture.setImage(image);
+            }
+        }
     }
 
     //movement functions
@@ -148,29 +157,24 @@ public class Player extends Component {
         health--;
     }
 
+    public void speedUp() {
+        speed += 50;
+    }
+
+    public void powerUp() {
+        power++;
+    }
+
+    public void bombCountUp() {
+        bombCount++;
+    }
 
     public String getName() {
         return this.name;
     }
 
-    public int getSpeed() {
-        return this.speed;
-    }
-
     public int getPower() {
         return this.power;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
-    public void setBombsPlaced(int bombsPlaced) {
-        this.bombsPlaced = bombsPlaced;
-    }
-
-    public int getBombsPlaced() {
-        return bombsPlaced;
     }
 
     public int getPlayerNumber() {
