@@ -73,7 +73,7 @@ public class BombermanFactory implements EntityFactory {
                 .view("bomb-1.png")
                 .with(new Bomb(data.get("radius")))
                 .with(new CollidableComponent(true))
-                .bbox(new HitBox(BoundingShape.box(64, 64)))
+                .bbox(new HitBox(BoundingShape.box(62, 62)))
                 .scale(1, 1)
                 .type(EntityTypes.BOMB)
                 .build();
@@ -95,7 +95,7 @@ public class BombermanFactory implements EntityFactory {
                 .with(physics)
                 .with(new Bomb(data.get("radius")))
                 .with(new CollidableComponent(true))
-                .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(64, 64)))
+                .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(62, 62)))
                 .type(EntityTypes.BOMB_ACTIVE)
                 .build();
     }

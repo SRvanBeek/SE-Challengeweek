@@ -39,12 +39,14 @@ public class Game extends GameApplication {
         gameSettings.setWidth(15 * 70);
         gameSettings.setHeight(10 * 70);
         gameSettings.setDeveloperMenuEnabled(true);
+        gameSettings.setMainMenuEnabled(true);
+        gameSettings.setTitle("Bomberman");
     }
 
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new BombermanFactory());
-        FXGL.setLevelFromMap("level1.tmx");
+        FXGL.setLevelFromMap("bomberman_level_5.tmx");
 
         player1 = getGameWorld().spawn("player1");
 
@@ -161,10 +163,11 @@ public class Game extends GameApplication {
                 System.out.println("collision end");
                 ArrayList<Integer> coords = getTileCoordinates(bomb.getX(), bomb.getY());
                 player1.getComponent(Player.class).placeBomb(spawn(
-                        "bomb_active", new SpawnData(coords.get(0), coords.get(1)).put("radius", player.getComponent(Player.class).getPower())));
+                        "bomb_active", new SpawnData(coords.get(0) + 1, coords.get(1) + 1).put("radius", player.getComponent(Player.class).getPower())));
 
                 System.out.println(bomb.getType());
                 bomb.removeFromWorld();
+
             }
         });
     }
