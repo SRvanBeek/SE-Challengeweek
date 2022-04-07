@@ -25,19 +25,15 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 
 public class Game extends GameApplication {
+
     private Entity player1;
     private Entity player2;
-    private ArrayList<Entity> walls = new ArrayList<>();
-    private int width = 960;
-    private int height = 832;
-    private final BombermanFactory bombermanFactory = new BombermanFactory();
-
 
 
     @Override
     protected void initSettings(GameSettings gameSettings) {
-        gameSettings.setWidth(15 * 70);
-        gameSettings.setHeight(10 * 70);
+        gameSettings.setWidth(950);
+        gameSettings.setHeight(820);
         gameSettings.setDeveloperMenuEnabled(true);
         gameSettings.setMainMenuEnabled(true);
         gameSettings.setTitle("Bomberman");
@@ -46,14 +42,12 @@ public class Game extends GameApplication {
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new BombermanFactory());
-        FXGL.setLevelFromMap("bomberman_level_5.tmx");
+        FXGL.setLevelFromMap("bomberman_level_1.tmx");
 
         player1 = getGameWorld().spawn("player", new SpawnData(60, 60).put("playerNumber", 1));
         player2 = getGameWorld().spawn("player", new SpawnData(160, 60).put("playerNumber", 2));
 
-        Viewport viewport = getGameScene().getViewport();
-        viewport.bindToEntity(player1, getAppWidth() /2.0, getAppHeight() /2.0);
-        viewport.setLazy(true);
+        FXGL.loopBGM("BGM.wav");
     }
 
     public ArrayList getTileCoordinates(double playerX, double playerY) {
