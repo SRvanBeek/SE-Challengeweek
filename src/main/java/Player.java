@@ -168,6 +168,10 @@ public class Player extends Component {
         return bombsPlaced;
     }
 
+    public int getPlayerNumber() {
+        return playerNumber;
+    }
+
     public int getHealth() {
         System.out.println(health);
         return health;

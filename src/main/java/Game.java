@@ -17,6 +17,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -69,7 +71,6 @@ public class Game extends GameApplication {
                 Entity box = getGameWorld().spawn("eBlock", new SpawnData(64 * i + 128, (64 * 10) * j + 64).put("viewbox", "box-1.png"));
             }
         }
-
 
 
         FXGL.loopBGM("BGM.wav");
@@ -235,7 +236,8 @@ public class Game extends GameApplication {
                 player.getComponent(Player.class).setHealth(player.getComponent(Player.class).getHealth() - 1);
                 System.out.println("health");
                 if (player.getComponent(Player.class).getHealth() == 0) {
-                    FXGL.getGameController().gotoMainMenu();
+                    FXGL.showMessage("Player " + player.getComponent(Player.class).getPlayerNumber() + " died in " + Math.round(getGameTimer().getNow()) + " seconds!");
+                    FXGL.getGameTimer().runOnceAfter(() -> FXGL.getGameController().gotoMainMenu() ,Duration.seconds(5));
                 }
             }
         });
