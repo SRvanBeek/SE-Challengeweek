@@ -14,96 +14,97 @@ import com.sun.javafx.scene.text.TextLayout;
 import javafx.geometry.Point2D;
 
 public class BombermanFactory implements EntityFactory {
-        public BombermanFactory() {
-        }
-        @Spawns("platform")
-        public Entity newPlatform(SpawnData data) {
-            return FXGL.entityBuilder(data)
-                    .type(EntityTypes.PLATFORM)
-                    .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
-                    .with(new PhysicsComponent())
-                    .build();
+    public BombermanFactory() {
     }
 
-        @Spawns("player1")
-        public Entity newPlayer1(SpawnData data) {
-            PhysicsComponent physics = new PhysicsComponent();
-            physics.setBodyType(BodyType.DYNAMIC);
+    @Spawns("platform")
+    public Entity newPlatform(SpawnData data) {
+        return FXGL.entityBuilder(data)
+                .type(EntityTypes.PLATFORM)
+                .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+                .with(new PhysicsComponent())
+                .build();
+    }
 
-            physics.addGroundSensor(
-                    new HitBox(
-                            "GROUND_SENSOR",
-                            new Point2D(16, 38),
-                            BoundingShape.box(6, 8)
-                    )
-            );
+    @Spawns("player1")
+    public Entity newPlayer1(SpawnData data) {
+        PhysicsComponent physics = new PhysicsComponent();
+        physics.setBodyType(BodyType.DYNAMIC);
 
-            physics.setFixtureDef(new FixtureDef().friction(0.0f));
+        physics.addGroundSensor(
+                new HitBox(
+                        "GROUND_SENSOR",
+                        new Point2D(16, 38),
+                        BoundingShape.box(6, 8)
+                )
+        );
 
-            return FXGL.entityBuilder(data)
-                    .at(60, 60)
-                    .type(EntityTypes.PLAYER)
-                    .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(31, 41)))
-                    .with(new CollidableComponent(true))
-                    .with(physics)
-                    .with(new Player())
-                    .build();
-        }
+        physics.setFixtureDef(new FixtureDef().friction(0.0f));
 
-        @Spawns("player2")
-        public Entity newPlayer2(SpawnData data) {
-            PhysicsComponent physics = new PhysicsComponent();
-            physics.setBodyType(BodyType.DYNAMIC);
+        return FXGL.entityBuilder(data)
+                .at(60, 60)
+                .type(EntityTypes.PLAYER)
+                .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(31, 41)))
+                .with(new CollidableComponent(true))
+                .with(physics)
+                .with(new Player())
+                .build();
+    }
 
-            physics.addGroundSensor(
-                    new HitBox(
-                            "GROUND_SENSOR",
-                            new Point2D(16, 38),
-                            BoundingShape.box(6, 8)
-                    )
-            );
+    @Spawns("player2")
+    public Entity newPlayer2(SpawnData data) {
+        PhysicsComponent physics = new PhysicsComponent();
+        physics.setBodyType(BodyType.DYNAMIC);
 
-            physics.setFixtureDef(new FixtureDef().friction(0.0f));
-            return FXGL.entityBuilder(data)
-                    .at(60, 60)
-                    .type(EntityTypes.PLAYER)
-                    .bbox(new HitBox(new Point2D(0, 0), BoundingShape.circle(36)))
-                    .with(new CollidableComponent(true))
-                    .with(physics)
-                    .with(new Player())
-                    .build();
-        }
+        physics.addGroundSensor(
+                new HitBox(
+                        "GROUND_SENSOR",
+                        new Point2D(16, 38),
+                        BoundingShape.box(6, 8)
+                )
+        );
 
-        @Spawns("wall")
-        public Entity newWall(SpawnData data) {
-            return FXGL.entityBuilder()
-                    .from(data)
-                    .viewWithBBox("wall.png")
-                    .with(new PhysicsComponent())
-                    .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"),data.<Integer>get("Height"))))
-                    .scale(0.4D, 0.4D)
-                    .type(EntityTypes.PLAYER)
-                    .build();
-        }
+        physics.setFixtureDef(new FixtureDef().friction(0.0f));
+        return FXGL.entityBuilder(data)
+                .at(60, 60)
+                .type(EntityTypes.PLAYER)
+                .bbox(new HitBox(new Point2D(0, 0), BoundingShape.circle(36)))
+                .with(new CollidableComponent(true))
+                .with(physics)
+                .with(new Player())
+                .build();
+    }
 
-        @Spawns("bomb")
-        public Entity newBomb(SpawnData data) {
-            return FXGL.entityBuilder()
-                    .from(data)
-                    .viewWithBBox("bomb-1.png")
-                    .with(new Bomb(data.get("radius")))
-                    .with(new CollidableComponent(true))
-                    .scale(1, 1)
-                    .type(EntityTypes.BOMB)
-                    .build();
-        }
+    @Spawns("wall")
+    public Entity newWall(SpawnData data) {
+        return FXGL.entityBuilder()
+                .from(data)
+                .viewWithBBox("wall.png")
+                .with(new PhysicsComponent())
+                .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("Height"))))
+                .scale(0.4D, 0.4D)
+                .type(EntityTypes.PLAYER)
+                .build();
+    }
+
+    @Spawns("bomb")
+    public Entity newBomb(SpawnData data) {
+        return FXGL.entityBuilder()
+                .from(data)
+                .viewWithBBox("bomb-1.png")
+                .with(new Bomb(data.get("radius")))
+                .with(new CollidableComponent(true))
+                .scale(1, 1)
+                .type(EntityTypes.BOMB)
+                .build();
+    }
 
     @Spawns("bomb_active")
     public Entity newBombActive(SpawnData data) {
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.DYNAMIC);
 
-        FixtureDef fd = new  FixtureDef();
+        FixtureDef fd = new FixtureDef();
         fd.friction(0.0f);
 
         physics.setFixtureDef(fd);
@@ -118,5 +119,18 @@ public class BombermanFactory implements EntityFactory {
                 .type(EntityTypes.BOMB_ACTIVE)
                 .build();
     }
+
+    @Spawns("explosion")
+    public Entity newExplosion(SpawnData data) {
+        return FXGL.entityBuilder()
+                .from(data)
+                .with(new ExplosionComponent())
+                .with(new CollidableComponent(true))
+                .scale(1, 1)
+                .type(EntityTypes.EXPLOSION)
+                .build();
     }
+}
+
+
 
