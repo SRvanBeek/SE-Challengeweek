@@ -13,6 +13,8 @@ import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
 import com.sun.javafx.scene.text.TextLayout;
 import javafx.geometry.Point2D;
 
+import java.awt.*;
+
 public class BombermanFactory implements EntityFactory {
     public BombermanFactory() {
     }
@@ -51,29 +53,6 @@ public class BombermanFactory implements EntityFactory {
                 .build();
     }
 
-    @Spawns("player2")
-    public Entity newPlayer2(SpawnData data) {
-        PhysicsComponent physics = new PhysicsComponent();
-        physics.setBodyType(BodyType.DYNAMIC);
-
-        physics.addGroundSensor(
-                new HitBox(
-                        "GROUND_SENSOR",
-                        new Point2D(16, 38),
-                        BoundingShape.box(6, 8)
-                )
-        );
-
-        physics.setFixtureDef(new FixtureDef().friction(0.0f));
-        return FXGL.entityBuilder(data)
-                .at(60, 60)
-                .type(EntityTypes.PLAYER)
-                .bbox(new HitBox(new Point2D(0, 0), BoundingShape.circle(36)))
-                .with(new CollidableComponent(true))
-                .with(physics)
-                .with(new Player())
-                .build();
-    }
 
     @Spawns("wall")
     public Entity newWall(SpawnData data) {
@@ -91,9 +70,10 @@ public class BombermanFactory implements EntityFactory {
     public Entity newBomb(SpawnData data) {
         return FXGL.entityBuilder()
                 .from(data)
-                .viewWithBBox("bomb-1.png")
+                .view("bomb-1.png")
                 .with(new Bomb(data.get("radius")))
                 .with(new CollidableComponent(true))
+                .bbox(new HitBox(BoundingShape.box(64, 64)))
                 .scale(1, 1)
                 .type(EntityTypes.BOMB)
                 .build();
@@ -111,11 +91,11 @@ public class BombermanFactory implements EntityFactory {
 
         return FXGL.entityBuilder()
                 .from(data)
-                .viewWithBBox("bomb-1.png")
+                .view("bomb-1.png")
                 .with(physics)
                 .with(new Bomb(data.get("radius")))
                 .with(new CollidableComponent(true))
-                .scale(1, 1)
+                .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(64, 64)))
                 .type(EntityTypes.BOMB_ACTIVE)
                 .build();
     }
