@@ -206,11 +206,14 @@ public class Game extends GameApplication {
     protected void initPhysics() {
         FXGL.getPhysicsWorld().setGravity(0, 0);
 
-        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.ITEM) {
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.EXPLOSION) {
             @Override
-            protected void onCollision(Entity player, Entity item) {
-                player1.getComponent(Player.class).setSpeed(player1.getComponent(Player.class).getSpeed() + 1);
-                item.removeFromWorld();
+            protected void onCollisionBegin(Entity player, Entity explosion) {
+                player.getComponent(Player.class).setHealth(player.getComponent(Player.class).getHealth() - 1);
+                System.out.println("health");
+                if (player.getComponent(Player.class).getHealth() == 0) {
+                    FXGL.getGameController().gotoMainMenu();
+                }
             }
         });
 

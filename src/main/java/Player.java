@@ -25,7 +25,7 @@ public class Player extends Component {
     private int bombCount = 400;
     private int bombsPlaced = 0;
     private int power = 5;
-    private int health;
+    private int health = 3;
     private int playerNumber;
 
     private PhysicsComponent physics;
@@ -166,5 +166,14 @@ public class Player extends Component {
 
     public int getBombsPlaced() {
         return bombsPlaced;
+    }
+
+    public int getHealth() {
+        System.out.println(health);
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
     }
 }
