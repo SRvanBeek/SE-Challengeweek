@@ -55,7 +55,7 @@ public class Player extends Component {
     }
 
 
-    public void animationMoving(){
+    public void animationMoving() {
         newAnimation = new AnimationChannel(
                 image(getAnimationOnMovement()),
                 1,
@@ -71,7 +71,7 @@ public class Player extends Component {
     }
 
     @Override
-    public void onAdded(){
+    public void onAdded() {
         entity.getViewComponent().addChild(texture);
     }
 
@@ -144,6 +144,11 @@ public class Player extends Component {
         }
     }
 
+    public void loseHealth() {
+        health--;
+    }
+
+
     public String getName() {
         return this.name;
     }
@@ -175,9 +180,5 @@ public class Player extends Component {
     public int getHealth() {
         System.out.println(health);
         return health;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
     }
 }

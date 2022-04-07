@@ -233,9 +233,14 @@ public class Game extends GameApplication {
         FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.EXPLOSION) {
             @Override
             protected void onCollisionBegin(Entity player, Entity explosion) {
-                player.getComponent(Player.class).setHealth(player.getComponent(Player.class).getHealth() - 1);
+                player.getComponent(Player.class).loseHealth();
                 System.out.println("health");
+                if (player.getComponent(Player.class).getHealth() > 0) {
+                    FXGL.play("player_hit.wav");
+                }
+
                 if (player.getComponent(Player.class).getHealth() == 0) {
+                    FXGL.play("player_dead.wav");
                     FXGL.showMessage("Player " + player.getComponent(Player.class).getPlayerNumber() + " died in " + Math.round(getGameTimer().getNow()) + " seconds!");
                     FXGL.getGameTimer().runOnceAfter(() -> FXGL.getGameController().gotoMainMenu() ,Duration.seconds(5));
                 }
