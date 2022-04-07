@@ -99,5 +99,18 @@ public class BombermanFactory implements EntityFactory {
                 .type(EntityTypes.BOMB_ACTIVE)
                 .build();
     }
+
+    @Spawns("explosion")
+    public Entity newExplosion(SpawnData data) {
+        return FXGL.entityBuilder()
+                .from(data)
+                .with(new ExplosionComponent())
+                .with(new CollidableComponent(true))
+                .scale(1, 1)
+                .type(EntityTypes.EXPLOSION)
+                .build();
+    }
 }
+
+
 

@@ -5,8 +5,7 @@ import com.almasb.fxgl.entity.components.BoundingBoxComponent;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import javafx.util.Duration;
 
-import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
-import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
+import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class Bomb extends Component {
     private int radius;
@@ -19,6 +18,9 @@ public class Bomb extends Component {
     public void explode(Entity bomb) {
         getGameTimer().runOnceAfter(() -> {
             if (bomb.getType() == EntityTypes.BOMB_ACTIVE) {
+                spawn("explosion", bomb.getX(), bomb.getY());
+                FXGL.play("explode.wav");
+                System.out.println("Explode sound");
                 bomb.removeFromWorld();
             }
         }, Duration.seconds(4));
