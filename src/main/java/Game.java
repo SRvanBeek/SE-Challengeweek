@@ -3,10 +3,17 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
+import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.CollisionHandler;
+import com.almasb.fxgl.physics.HitBox;
+import com.almasb.fxgl.physics.PhysicsComponent;
+import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
+import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
+import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -111,7 +118,8 @@ public class Game extends GameApplication {
         getInput().addAction(new UserAction("Place Bomb") {
             @Override
             protected void onActionBegin() {
-                player1.getComponent(Player.class).placeBomb();
+                player1.getComponent(Player.class).placeBomb(spawn(
+                        "bomb", new SpawnData(player1.getX(), player1.getY()).put("radius", player1.getComponent(Player.class).getPower())));
             }
         }, KeyCode.F);
     }
@@ -126,6 +134,20 @@ public class Game extends GameApplication {
             protected void onCollision(Entity player, Entity item) {
                 player1.getComponent(Player.class).setSpeed(player1.getComponent(Player.class).getSpeed() + 1);
                 item.removeFromWorld();
+            }
+        });
+
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.BOMB) {
+            @Override
+            protected void onCollisionEnd(Entity player, Entity bomb) {
+
+                System.out.println("collision end");
+                player1.getComponent(Player.class).placeBomb(spawn(
+                        "bomb_active", new SpawnData(bomb.getX(), bomb.getY()).put("radius", player.getComponent(Player.class).getPower())));
+
+                System.out.println(bomb.getType());
+                bomb.removeFromWorld();
+
             }
         });
     }

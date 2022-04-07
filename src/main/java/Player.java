@@ -20,10 +20,6 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 public class Player extends Component {
     private String name;
 
-    private CellMoveComponent cell;
-    private AStarMoveComponent astar;
-
-
     private int speed = 200;
     private int bombCount = 4;
     private int bombsPlaced = 0;
@@ -33,7 +29,7 @@ public class Player extends Component {
 
     private PhysicsComponent physics;
     private AnimatedTexture texture;
-    private String direction;
+    private String direction = "down";
 
     private AnimationChannel initialAnimation;
     private AnimationChannel newAnimation;
@@ -42,7 +38,6 @@ public class Player extends Component {
 
 
     public Player() {
-
         this.initialAnimation = new AnimationChannel(
                 image,
                 4,
@@ -57,11 +52,10 @@ public class Player extends Component {
     }
 
 
-
     public void animationMoving(){
-        this.newAnimation = new AnimationChannel(
+        newAnimation = new AnimationChannel(
                 image(getAnimationOnMovement()),
-                4,
+                1,
                 31,
                 41,
                 Duration.seconds(1),
@@ -77,13 +71,13 @@ public class Player extends Component {
     public void onAdded(){
         entity.getViewComponent().addChild(texture);
     }
+
     public String getAnimationOnMovement() {
         String animationName = "player_1" + "_move_";
         //animationName += physics.isMovingX() || physics.isMovingY() ? "move_" : "idle_";
         animationName += direction + ".png";
         return animationName;
     }
-
 
     @Override
     public void onUpdate(double tpf) {
@@ -96,12 +90,12 @@ public class Player extends Component {
 
     //movement functions
     public void left() {
-        direction = "left";
+        direction = "down";
         physics.setVelocityX(-speed);
     }
 
     public void right() {
-        direction = "right";
+        direction = "down";
         physics.setVelocityX(speed);
     }
 
@@ -125,20 +119,25 @@ public class Player extends Component {
 
 
     //bomb mechanics
-    public void placeBomb() {
-        System.out.println("bomb placed");
+    public void placeBomb(Entity bomb) {
+
 
         if (bombsPlaced == bombCount) {
+            bomb.removeFromWorld();
             return;
         }
-        bombsPlaced++;
 
-        Entity bomb = spawn("bomb", new SpawnData(entity.getX(), entity.getY()).put("radius", power));
+        if (bomb.getType() == EntityTypes.BOMB_ACTIVE) {
+            bombsPlaced++;
+            System.out.println("bomb placed");
+            bomb.getComponent(Bomb.class).explode(bomb);
 
-        getGameTimer().runOnceAfter(() -> {
-            bomb.getComponent(Bomb.class).explode();
-            bombsPlaced--;
-        }, Duration.seconds(20));
+            System.out.println(bombsPlaced);
+            getGameTimer().runOnceAfter(() -> {
+                bombsPlaced--;
+            }, Duration.seconds(4));
+
+        }
     }
 
     public String getName() {
@@ -155,5 +154,13 @@ public class Player extends Component {
 
     public void setSpeed(int speed) {
         this.speed = speed;
+    }
+
+    public void setBombsPlaced(int bombsPlaced) {
+        this.bombsPlaced = bombsPlaced;
+    }
+
+    public int getBombsPlaced() {
+        return bombsPlaced;
     }
 }

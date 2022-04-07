@@ -88,28 +88,35 @@ public class BombermanFactory implements EntityFactory {
 
         @Spawns("bomb")
         public Entity newBomb(SpawnData data) {
-            PhysicsComponent physics = new PhysicsComponent();
-            physics.setBodyType(BodyType.DYNAMIC);
-
-            physics.addGroundSensor(
-                    new HitBox(
-                            "GROUND_SENSOR",
-                            new Point2D(16, 38),
-                            BoundingShape.box(6, 8)
-                    )
-            );
-
-            physics.setFixtureDef(new FixtureDef().friction(0.0f));
-
             return FXGL.entityBuilder()
                     .from(data)
-                    .viewWithBBox("box-1.png")
-                    .with(physics)
-                    .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(64, 64)))
+                    .viewWithBBox("bomb-1.png")
                     .with(new Bomb(data.get("radius")))
+                    .with(new CollidableComponent(true))
                     .scale(1, 1)
                     .type(EntityTypes.BOMB)
                     .build();
         }
+
+    @Spawns("bomb_active")
+    public Entity newBombActive(SpawnData data) {
+        PhysicsComponent physics = new PhysicsComponent();
+        physics.setBodyType(BodyType.DYNAMIC);
+
+        FixtureDef fd = new  FixtureDef();
+        fd.friction(0.0f);
+
+        physics.setFixtureDef(fd);
+
+        return FXGL.entityBuilder()
+                .from(data)
+                .viewWithBBox("bomb-1.png")
+                .with(physics)
+                .with(new Bomb(data.get("radius")))
+                .with(new CollidableComponent(true))
+                .scale(1, 1)
+                .type(EntityTypes.BOMB_ACTIVE)
+                .build();
+    }
     }
 
