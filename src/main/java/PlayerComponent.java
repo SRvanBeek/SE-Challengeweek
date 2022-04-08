@@ -1,11 +1,6 @@
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
-import com.almasb.fxgl.pathfinding.CellMoveComponent;
-import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import com.almasb.fxgl.physics.PhysicsComponent;
-import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
-import com.almasb.fxgl.physics.box2d.dynamics.contacts.Position;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.collections.ObservableList;
@@ -13,15 +8,13 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
 
-import java.awt.geom.Point2D;
-
 import static com.almasb.fxgl.dsl.FXGL.getGameScene;
 import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.image;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 
 
-public class Player extends Component {
+public class PlayerComponent extends Component {
 
     private String name;
 
@@ -32,6 +25,7 @@ public class Player extends Component {
     private int health = 3;
     private int playerNumber;
     private int invisFrames = 0;
+
     
     private PhysicsComponent physics;
     private AnimatedTexture texture;
@@ -42,7 +36,7 @@ public class Player extends Component {
     Image image = image("player_1_move_down.png");
     private ObservableList<Node> nodeList = getGameScene().getUINodes();
 
-    public Player(int playerNumber) {
+    public PlayerComponent(int playerNumber) {
         this.playerNumber = playerNumber;
         this.initialAnimation = new AnimationChannel(
                 image,
@@ -54,22 +48,6 @@ public class Player extends Component {
                 3
         );
         texture = new AnimatedTexture(initialAnimation);
-        texture.loop();
-    }
-
-
-    public void animationMoving() {
-        newAnimation = new AnimationChannel(
-                image(getAnimationOnMovement()),
-                1,
-                31,
-                41,
-                Duration.seconds(1),
-                1,
-                3
-
-        );
-        texture = new AnimatedTexture(newAnimation);
         texture.loop();
     }
 
@@ -146,7 +124,7 @@ public class Player extends Component {
         }
         if (bomb.getType() == EntityTypes.BOMB_ACTIVE) {
             bombsPlaced++;
-            bomb.getComponent(Bomb.class).explode(bomb);
+            bomb.getComponent(BombComponent.class).explode(bomb);
             getGameTimer().runOnceAfter(() -> {
                 bombsPlaced--;
             }, Duration.seconds(4));
@@ -160,12 +138,12 @@ public class Player extends Component {
             health--;
             getGameTimer().runOnceAfter(() -> {
                 invisFrames = 0;
-            }, Duration.millis(500));
+            }, Duration.millis(600));
         }
     }
 
     public void speedUp() {
-        speed += 20;
+        speed += 30;
     }
 
     public void powerUp() {
@@ -199,6 +177,7 @@ public class Player extends Component {
         System.out.println("health: " + health);
         return health;
     }
+
 
     public void adjustHeartsPlayerOne() {
 

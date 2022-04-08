@@ -9,11 +9,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
-public class Bomb extends Component {
+public class BombComponent extends Component {
     private int radius;
     private PhysicsComponent physics;
 
-    public Bomb(int radius) {
+    public BombComponent(int radius) {
         this.radius = radius;
     }
 
@@ -23,7 +23,7 @@ public class Bomb extends Component {
                 spawn("explosion", bomb.getX(), bomb.getY());
 
                 for (int i = 1; i <= radius; i++) {
-                    Entity explosion = spawn("explosion", bomb.getX() + 64 * i, bomb.getY());
+                   spawn("explosion", bomb.getX() + 64 * i, bomb.getY());
                 }
 
                 for (int i = 1; i <= radius; i++) {
@@ -42,7 +42,7 @@ public class Bomb extends Component {
                 FXGL.play("explode.wav");
                 bomb.removeFromWorld();
             }
-        }, Duration.seconds(4));
+        }, Duration.seconds(3));
     }
 
 

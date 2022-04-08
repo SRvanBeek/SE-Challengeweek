@@ -3,17 +3,13 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
-import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
-import com.sun.javafx.scene.text.TextLayout;
 import javafx.geometry.Point2D;
-
-import java.awt.*;
 
 public class BombermanFactory implements EntityFactory {
 
@@ -51,7 +47,7 @@ public class BombermanFactory implements EntityFactory {
                 .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(31, 41)))
                 .with(new CollidableComponent(true))
                 .with(physics)
-                .with(new Player(data.get("playerNumber")))
+                .with(new PlayerComponent(data.get("playerNumber")))
                 .build();
     }
 
@@ -74,7 +70,7 @@ public class BombermanFactory implements EntityFactory {
         return FXGL.entityBuilder()
                 .from(data)
                 .view("bomb-1.png")
-                .with(new Bomb(data.get("radius")))
+                .with(new BombComponent(data.get("radius")))
                 .with(new CollidableComponent(true))
                 .bbox(new HitBox(BoundingShape.box(62, 62)))
                 .scale(1, 1)
@@ -96,7 +92,7 @@ public class BombermanFactory implements EntityFactory {
                 .view("bomb-1.png")
                 .with(physics)
                 .type(EntityTypes.BOMB_ACTIVE)
-                .with(new Bomb(data.get("radius")))
+                .with(new BombComponent(data.get("radius")))
                 .with(new CollidableComponent(true))
                 .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(62, 62)))
                 .build();

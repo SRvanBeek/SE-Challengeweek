@@ -1,30 +1,20 @@
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
-import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
-import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.input.virtual.VirtualButton;
-import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.CollisionHandler;
-import com.almasb.fxgl.physics.HitBox;
-import com.almasb.fxgl.physics.PhysicsComponent;
-import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
-import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
-import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
+import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGL.getInput;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
@@ -33,6 +23,13 @@ public class Game extends GameApplication {
 
     private Entity player1;
     private Entity player2;
+    private int level = 1;
+
+    private int player1Score = 0;
+    private int player2Score = 0;
+
+    private int pFrames = 0;
+    private double currentTime;
 
 
     @Override
@@ -41,6 +38,7 @@ public class Game extends GameApplication {
         gameSettings.setHeight(820);
         gameSettings.setDeveloperMenuEnabled(true);
         gameSettings.setMainMenuEnabled(true);
+        gameSettings.setSceneFactory(new MenuFactory());
         gameSettings.setTitle("Bomberman");
     }
 
@@ -48,7 +46,9 @@ public class Game extends GameApplication {
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new BombermanFactory());
-        FXGL.setLevelFromMap("bomberman_level_3.tmx");
+        FXGL.setLevelFromMap("bomberman_level_" + level + ".tmx");
+
+        currentTime = getGameTimer().getNow();
 
         player1 = getGameWorld().spawn("player", new SpawnData(65, 65).put("playerNumber", 1));
         player2 = getGameWorld().spawn("player", new SpawnData(850, 700).put("playerNumber", 2));
@@ -56,21 +56,6 @@ public class Game extends GameApplication {
         for (int i = 1; i < 12; i++) {
             for (int j = 1; j < 5; j++) {
                 Entity box = getGameWorld().spawn("eBlock", new SpawnData(64 * i + 64, 128 * j + 64).put("viewbox", "box-1.png"));
-                int spawnrate = (int) (Math.random() * 7);
-                if (spawnrate < 3) {
-                    if (spawnrate == 0) {
-                        getGameWorld().spawn("speed_up", new SpawnData(box.getX(), box.getY()));
-                        break;
-                    }
-                    if (spawnrate == 1) {
-                        getGameWorld().spawn("power_up", new SpawnData(box.getX(), box.getY()));
-                        break;
-                    }
-                    if (spawnrate == 2) {
-                            getGameWorld().spawn("bomb_up", new SpawnData(box.getX(), box.getY()));
-                            break;
-                    }
-                }
             }
         }
         for (int i = 1; i < 6; i++) {
@@ -106,13 +91,13 @@ public class Game extends GameApplication {
             @Override
             protected void onAction() {
                 super.onAction();
-                player1.getComponent(Player.class).up();
+                player1.getComponent(PlayerComponent.class).up();
             }
 
             @Override
             protected void onActionEnd() {
                 super.onActionEnd();
-                player1.getComponent(Player.class).stopYMovement();
+                player1.getComponent(PlayerComponent.class).stopYMovement();
             }
         }, KeyCode.W, VirtualButton.UP);
 
@@ -120,13 +105,13 @@ public class Game extends GameApplication {
             @Override
             protected void onAction() {
                 super.onAction();
-                player2.getComponent(Player.class).up();
+                player2.getComponent(PlayerComponent.class).up();
             }
 
             @Override
             protected void onActionEnd() {
                 super.onActionEnd();
-                player2.getComponent(Player.class).stopYMovement();
+                player2.getComponent(PlayerComponent.class).stopYMovement();
             }
         }, KeyCode.UP, VirtualButton.UP);
 
@@ -134,13 +119,13 @@ public class Game extends GameApplication {
             @Override
             protected void onAction() {
                 super.onAction();
-                player1.getComponent(Player.class).down();
+                player1.getComponent(PlayerComponent.class).down();
             }
 
             @Override
             protected void onActionEnd() {
                 super.onActionEnd();
-                player1.getComponent(Player.class).stopYMovement();
+                player1.getComponent(PlayerComponent.class).stopYMovement();
             }
         }, KeyCode.S, VirtualButton.DOWN);
 
@@ -148,13 +133,13 @@ public class Game extends GameApplication {
             @Override
             protected void onAction() {
                 super.onAction();
-                player2.getComponent(Player.class).down();
+                player2.getComponent(PlayerComponent.class).down();
             }
 
             @Override
             protected void onActionEnd() {
                 super.onActionEnd();
-                player2.getComponent(Player.class).stopYMovement();
+                player2.getComponent(PlayerComponent.class).stopYMovement();
             }
         }, KeyCode.DOWN, VirtualButton.DOWN);
 
@@ -162,13 +147,13 @@ public class Game extends GameApplication {
             @Override
             protected void onAction() {
                 super.onAction();
-                player1.getComponent(Player.class).left();
+                player1.getComponent(PlayerComponent.class).left();
             }
 
             @Override
             protected void onActionEnd() {
                 super.onActionEnd();
-                player1.getComponent(Player.class).stopXMovement();
+                player1.getComponent(PlayerComponent.class).stopXMovement();
             }
         }, KeyCode.A, VirtualButton.LEFT);
 
@@ -176,13 +161,13 @@ public class Game extends GameApplication {
             @Override
             protected void onAction() {
                 super.onAction();
-                player2.getComponent(Player.class).left();
+                player2.getComponent(PlayerComponent.class).left();
             }
 
             @Override
             protected void onActionEnd() {
                 super.onActionEnd();
-                player2.getComponent(Player.class).stopXMovement();
+                player2.getComponent(PlayerComponent.class).stopXMovement();
             }
         }, KeyCode.LEFT, VirtualButton.LEFT);
 
@@ -190,13 +175,13 @@ public class Game extends GameApplication {
             @Override
             protected void onAction() {
                 super.onAction();
-                player1.getComponent(Player.class).right();
+                player1.getComponent(PlayerComponent.class).right();
             }
 
             @Override
             protected void onActionEnd() {
                 super.onActionEnd();
-                player1.getComponent(Player.class).stopXMovement();
+                player1.getComponent(PlayerComponent.class).stopXMovement();
             }
         }, KeyCode.D, VirtualButton.RIGHT);
 
@@ -204,13 +189,13 @@ public class Game extends GameApplication {
             @Override
             protected void onAction() {
                 super.onAction();
-                player2.getComponent(Player.class).right();
+                player2.getComponent(PlayerComponent.class).right();
             }
 
             @Override
             protected void onActionEnd() {
                 super.onActionEnd();
-                player2.getComponent(Player.class).stopXMovement();
+                player2.getComponent(PlayerComponent.class).stopXMovement();
             }
         }, KeyCode.RIGHT, VirtualButton.RIGHT);
 
@@ -218,8 +203,8 @@ public class Game extends GameApplication {
             @Override
             protected void onActionBegin() {
                 ArrayList<Integer> coords = getTileCoordinates(player1.getX(), player1.getY());
-                player1.getComponent(Player.class).placeBomb(spawn(
-                        "bomb", new SpawnData(coords.get(0), coords.get(1)).put("radius", player1.getComponent(Player.class).getPower())));
+                player1.getComponent(PlayerComponent.class).placeBomb(spawn(
+                        "bomb", new SpawnData(coords.get(0), coords.get(1)).put("radius", player1.getComponent(PlayerComponent.class).getPower())));
             }
         }, KeyCode.SPACE);
 
@@ -227,12 +212,35 @@ public class Game extends GameApplication {
             @Override
             protected void onActionBegin() {
                 ArrayList<Integer> coords = getTileCoordinates(player2.getX(), player2.getY());
-                player2.getComponent(Player.class).placeBomb(spawn(
-                        "bomb", new SpawnData(coords.get(0), coords.get(1)).put("radius", player2.getComponent(Player.class).getPower())));
+                player2.getComponent(PlayerComponent.class).placeBomb(spawn(
+                        "bomb", new SpawnData(coords.get(0), coords.get(1)).put("radius", player2.getComponent(PlayerComponent.class).getPower())));
             }
         }, KeyCode.ENTER);
     }
 
+    public String checkScore() {
+        if (player1Score == 3) {
+            System.out.println("player 1 wins!");
+            return "player 1";
+        }
+        if (player2Score == 3) {
+            System.out.println("player 2 wins!");
+            return "player 2";
+        } else {
+            return null;
+        }
+    }
+
+    public void scoreUp() {
+        if (player1.getComponent(PlayerComponent.class).getHealth() == 0) {
+            player2Score++;
+            System.out.println("player 2:" + player2Score);
+        }
+        if (player2.getComponent(PlayerComponent.class).getHealth() == 0) {
+            player1Score++;
+            System.out.println("player 1:" + player1Score);
+        }
+    }
 
     @Override
     protected void initPhysics() {
@@ -240,31 +248,61 @@ public class Game extends GameApplication {
         FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.EXPLOSION) {
             @Override
             protected void onCollisionBegin(Entity player, Entity explosion) {
-                player.getComponent(Player.class).loseHealth();
+                player.getComponent(PlayerComponent.class).loseHealth();
                 System.out.println("health");
 
-                player1.getComponent(Player.class).adjustHeartsPlayerOne();
-                player2.getComponent(Player.class).adjustHeartsPlayerTwo();
+                player1.getComponent(PlayerComponent.class).adjustHeartsPlayerOne();
+                player2.getComponent(PlayerComponent.class).adjustHeartsPlayerTwo();
 
-                if (player.getComponent(Player.class).getHealth() > 0) {
+                if (player.getComponent(PlayerComponent.class).getHealth() > 0) {
                     FXGL.play("player_hit.wav");
                 }
-                if (player.getComponent(Player.class).getHealth() == 0) {
-                    FXGL.play("player_dead.wav");
-                    FXGL.showMessage("Player " + player.getComponent(Player.class).getPlayerNumber() + " died in " + Math.round(getGameTimer().getNow()) + " seconds!");
 
-                    FXGL.getGameTimer().runOnceAfter(() -> FXGL.getAudioPlayer().stopAllMusic() ,Duration.seconds(4.5));
-                    FXGL.getGameTimer().runOnceAfter(() -> {
-                        FXGL.getGameController().gotoMainMenu();
-                        } ,Duration.seconds(5));
+
+                if (player.getComponent(PlayerComponent.class).getHealth() == 0) {
+                    if (pFrames == 0) {
+                        pFrames = 1;
+                        FXGL.play("player_dead.wav");
+                        FXGL.showMessage("Player " + player.getComponent(PlayerComponent.class).getPlayerNumber() + " died in " + (Math.round(getGameTimer().getNow() - currentTime)) + " seconds!");
+
+                        getGameTimer().runOnceAfter(() -> {
+                            pFrames = 0;
+                        }, Duration.millis(600));
+
+                        scoreUp();
+                        if (checkScore() != null) {
+                            FXGL.showMessage(checkScore() + " wins!");
+                            player1Score = 0;
+                            player2Score = 0;
+                            level = 0;
+                        }
+
+                        FXGL.getGameTimer().runOnceAfter(() -> FXGL.getAudioPlayer().stopAllMusic(), Duration.seconds(4.5));
+                        FXGL.getGameTimer().runOnceAfter(() -> {
+                            FXGL.getGameController().gotoMainMenu();
+                            level++;
+                        }, Duration.seconds(5));
+                    }
                 }
             }
-        });
+            });
 
 
         FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.EXPLODABLE_BLOCK, EntityTypes.EXPLOSION) {
             @Override
             protected void onCollisionBegin(Entity block, Entity explosion) {
+                int spawnrate = (int) (Math.random() * 10);
+                if (spawnrate < 3) {
+                    if (spawnrate == 0) {
+                        getGameWorld().spawn("speed_up", new SpawnData(block.getX(), block.getY()));
+                    }
+                    if (spawnrate == 1) {
+                        getGameWorld().spawn("power_up", new SpawnData(block.getX(), block.getY()));
+                    }
+                    if (spawnrate == 2) {
+                        getGameWorld().spawn("bomb_up", new SpawnData(block.getX(), block.getY()));
+                    }
+                }
                 block.removeFromWorld();
             }
         });
@@ -274,8 +312,8 @@ public class Game extends GameApplication {
             @Override
             protected void onCollisionEnd(Entity player, Entity bomb) {
                 ArrayList<Integer> coords = getTileCoordinates(bomb.getX(), bomb.getY());
-                player1.getComponent(Player.class).placeBomb(spawn(
-                        "bomb_active", new SpawnData(coords.get(0) + 1, coords.get(1) + 1).put("radius", player.getComponent(Player.class).getPower())));
+                player1.getComponent(PlayerComponent.class).placeBomb(spawn(
+                        "bomb_active", new SpawnData(coords.get(0) + 1, coords.get(1) + 1).put("radius", player.getComponent(PlayerComponent.class).getPower())));
                 bomb.removeFromWorld();
             }
         });
@@ -284,8 +322,8 @@ public class Game extends GameApplication {
         FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.SPEED_UP) {
             @Override
             protected void onCollisionBegin(Entity player, Entity item) {
-                System.out.println("player " + player.getComponent(Player.class).getPlayerNumber());
-                player.getComponent(Player.class).speedUp();
+                System.out.println("player " + player.getComponent(PlayerComponent.class).getPlayerNumber());
+                player.getComponent(PlayerComponent.class).speedUp();
                 item.removeFromWorld();
             }
         });
@@ -293,7 +331,7 @@ public class Game extends GameApplication {
         FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.POWER_UP) {
             @Override
             protected void onCollisionBegin(Entity player, Entity item) {
-                player.getComponent(Player.class).powerUp();
+                player.getComponent(PlayerComponent.class).powerUp();
                 item.removeFromWorld();
             }
         });
@@ -301,7 +339,7 @@ public class Game extends GameApplication {
         FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.BOMB_UP) {
             @Override
             protected void onCollisionBegin(Entity player, Entity item) {
-                player.getComponent(Player.class).bombCountUp();
+                player.getComponent(PlayerComponent.class).bombCountUp();
                 item.removeFromWorld();
             }
         });
