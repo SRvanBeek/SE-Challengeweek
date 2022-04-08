@@ -27,6 +27,16 @@ public class BombermanFactory implements EntityFactory {
                 .build();
     }
 
+    @Spawns("platform_bg")
+    public Entity newPlatform_bg(SpawnData data) {
+        return FXGL.entityBuilder(data)
+                .type(EntityTypes.PLATFORM_BG)
+                .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+                .with(new CollidableComponent(true))
+                .with(new PhysicsComponent())
+                .build();
+    }
+
 
     @Spawns("player")
     public Entity newPlayer(SpawnData data) {
@@ -106,7 +116,18 @@ public class BombermanFactory implements EntityFactory {
                 .type(EntityTypes.EXPLOSION)
                 .with(new ExplosionComponent())
                 .with(new CollidableComponent(true))
-                .bbox(new HitBox(new Point2D(0, 0), BoundingShape.box(62, 62)))
+                .bbox(new HitBox(new Point2D(10, 10), BoundingShape.box(40, 40)))
+                .scale(1, 1)
+                .build();
+    }
+
+    @Spawns("collisionCheck")
+    public Entity newCCheck(SpawnData data) {
+        return FXGL.entityBuilder()
+                .from(data)
+                .type(EntityTypes.COLLIDABLE)
+                .with(new CollidableComponent(true))
+                .bbox(new HitBox(new Point2D(30, 30), BoundingShape.box(2, 2)))
                 .scale(1, 1)
                 .build();
     }

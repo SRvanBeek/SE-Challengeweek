@@ -234,11 +234,11 @@ public class Game extends GameApplication {
     public void scoreUp() {
         if (player1.getComponent(PlayerComponent.class).getHealth() == 0) {
             player2Score++;
-            System.out.println("player 2:" + player2Score);
+            System.out.println("player 2: " + player2Score);
         }
         if (player2.getComponent(PlayerComponent.class).getHealth() == 0) {
             player1Score++;
-            System.out.println("player 1:" + player1Score);
+            System.out.println("player 1: " + player1Score);
         }
     }
 
@@ -249,7 +249,7 @@ public class Game extends GameApplication {
             @Override
             protected void onCollisionBegin(Entity player, Entity explosion) {
                 player.getComponent(PlayerComponent.class).loseHealth();
-                System.out.println("health");
+
 
                 player1.getComponent(PlayerComponent.class).adjustHeartsPlayerOne();
                 player2.getComponent(PlayerComponent.class).adjustHeartsPlayerTwo();
@@ -322,7 +322,6 @@ public class Game extends GameApplication {
         FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER, EntityTypes.SPEED_UP) {
             @Override
             protected void onCollisionBegin(Entity player, Entity item) {
-                System.out.println("player " + player.getComponent(PlayerComponent.class).getPlayerNumber());
                 player.getComponent(PlayerComponent.class).speedUp();
                 item.removeFromWorld();
             }

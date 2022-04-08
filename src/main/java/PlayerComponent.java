@@ -174,7 +174,6 @@ public class PlayerComponent extends Component {
 
 
     public int getHealth() {
-        System.out.println("health: " + health);
         return health;
     }
 

@@ -23,8 +23,8 @@
  <objectgroup id="2" name="Object Layer 1">
   <object id="2" name="platform" type="platform" x="32" y="23" width="919" height="38"/>
   <object id="3" name="platform" type="platform" x="37" y="35" width="23" height="777"/>
-  <object id="4" name="platform" type="platform" x="19" y="770" width="916" height="25"/>
-  <object id="5" name="platform" type="platform" x="898" y="48" width="31" height="758"/>
+  <object id="4" name="platform_bg" type="platform_bg" x="19" y="770" width="916" height="25"/>
+  <object id="5" name="platform_bg" type="platform_bg" x="898" y="48" width="31" height="758"/>
   <object id="105" name="platform" type="platform" x="128" y="128" width="64" height="64"/>
   <object id="106" name="platform" type="platform" x="256" y="128" width="64" height="64"/>
   <object id="108" name="platform" type="platform" x="384" y="128" width="64" height="64"/>

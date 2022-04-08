@@ -7,11 +7,16 @@ import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
+import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class ExplosionComponent extends Component {
     private AnimationChannel explosionAnimation;
     private AnimatedTexture texture;
+
 
     Image image = image("bomb_explosion.png");
 
@@ -35,7 +40,4 @@ public class ExplosionComponent extends Component {
     public void onAdded() {
         entity.getViewComponent().addChild(texture);
     }
-
-
-
 }
