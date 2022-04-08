@@ -312,7 +312,7 @@ public class Game extends GameApplication {
             @Override
             protected void onCollisionEnd(Entity player, Entity bomb) {
                 ArrayList<Integer> coords = getTileCoordinates(bomb.getX(), bomb.getY());
-                player1.getComponent(PlayerComponent.class).placeBomb(spawn(
+                player.getComponent(PlayerComponent.class).placeBomb(spawn(
                         "bomb_active", new SpawnData(coords.get(0) + 1, coords.get(1) + 1).put("radius", player.getComponent(PlayerComponent.class).getPower())));
                 bomb.removeFromWorld();
             }
